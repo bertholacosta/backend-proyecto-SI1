@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const registroController = require("../controllers/clienteController.js");  
+const clienteController = require("../controllers/clienteController.js");  
 
-router.post("/", registroController.createCliente);
+router.post("/", clienteController.createCliente);
 
-router.get("/", registroController.mostrarClientes);
+router.get("/", clienteController.mostrarClientes);
 
 module.exports = router;
