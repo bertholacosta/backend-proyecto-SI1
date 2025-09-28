@@ -13,10 +13,6 @@ app.use(cors({
 
 app.use(cookieParser());
 
-
-
-app.use('/marcamoto', require('./routes/marcamotoRoute'));
-
 app.use('/empleado', require('./routes/empleadoRoute'));
 
 app.use('/cliente', require('./routes/clienteRoute'));
@@ -24,7 +20,6 @@ app.use('/cliente', require('./routes/clienteRoute'));
 app.use('/usuario', require('./routes/usuarioRoute'));
 
 app.use('/auth',require('./routes/authRoute'));
-
 
 app.listen(3000, () => 
     console.log('Server is running on port 3000'))
