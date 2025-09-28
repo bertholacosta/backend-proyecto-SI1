@@ -17,7 +17,11 @@ app.use(cookieParser());
 
 app.use('/marcamoto', require('./routes/marcamotoRoute'));
 
-app.use('/registro', require('./routes/registroRoute'));
+app.use('/empleado', require('./routes/empleadoRoute'));
+
+app.use('/cliente', require('./routes/clienteRoute'));
+
+app.use('/usuario', require('./routes/usuarioRoute'));
 
 app.use('/auth',require('./routes/authRoute'));
 
