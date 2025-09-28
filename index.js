@@ -1,0 +1,26 @@
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const cookieParser = require("cookie-parser");
+require('dotenv').config();
+
+app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:5173", // tu React
+  credentials: true // permite cookies cross-origin
+}));
+
+app.use(cookieParser());
+
+
+
+app.use('/marcamoto', require('./routes/marcamotoRoute'));
+
+app.use('/registro', require('./routes/registroRoute'));
+
+app.use('/auth',require('./routes/authRoute'));
+
+
+app.listen(3000, () => 
+    console.log('Server is running on port 3000'))

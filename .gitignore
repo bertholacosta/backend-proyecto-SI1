@@ -1,0 +1,61 @@
+# --- Logs y diagnósticos ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+# --- Datos de runtime / procesos ---
+pids/
+*.pid
+*.seed
+*.pid.lock
+# --- Cobertura / pruebas ---
+coverage/
+.nyc_output/
+# --- Caches de herramientas ---
+.cache/
+.parcel-cache/
+.babelcache/
+.eslintcache
+.turbo/
+.next/
+.svelte-kit/
+.nuxt/
+# --- Salidas de build ---
+dist/
+build/
+out/
+# TypeScript incremental
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+# --- Dependencias ---
+node_modules/
+# --- Entornos (mantén un .env.example en el repo) ---
+.env
+.env.*
+!.env.example
+# --- DB locales / archivos temporales (por si usas SQLite en dev) ---
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+dev.db
+# --- Prisma ---
+prisma/client/
+prisma/generated/
+prisma/dev.db
+prisma/dev.db-journal
+# --- PM2 / procesos ---
+.pm2/
+# --- Archivos de empaquetado accidental ---
+*.tgz
+# --- SO / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+# --- Docker ---
+docker-data/
