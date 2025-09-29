@@ -7,7 +7,7 @@ require('dotenv').config();
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:5173", // tu React
+  origin: "http://frontend-proyecto-si-1.vercel.app", // tu React
   credentials: true // permite cookies cross-origin
 }));
 
