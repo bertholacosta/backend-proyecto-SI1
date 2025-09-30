@@ -1,8 +1,11 @@
 const router = require("express").Router();
-const clienteController = require("../controllers/clienteController.js");  
+const clienteController = require("../controllers/clienteController.js");
+const { verifyToken } = require("../middleware/authMiddleware");
+const { clienteValidation } = require("../middleware/validationMiddleware");
 
-router.post("/", clienteController.createCliente);
+// Proteger rutas de clientes con autenticación
+router.post("/", verifyToken, clienteValidation, clienteController.createCliente);
 
-router.get("/", clienteController.mostrarClientes);
+router.get("/", verifyToken, clienteController.mostrarClientes);
 
 module.exports = router;
