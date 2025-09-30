@@ -55,9 +55,10 @@ const loginValidation = validateRequest({
 });
 
 const clienteValidation = validateRequest({
+  ci: Validaciones.ci,
   nombre: Validaciones.nombre,
   telefono: Validaciones.telefono,
-  email: Validaciones.email
+  direccion: Validaciones.direccion
 });
 
 const empleadoValidation = validateRequest({
