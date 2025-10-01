@@ -47,8 +47,17 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Middleware para manejar preflight requests
-app.options('*', cors(corsOptions));
+// Middleware para manejar preflight requests manualmente
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie, X-Requested-With');
+        res.header('Access-Control-Allow-Credentials', 'true');
+        return res.status(200).end();
+    }
+    next();
+});
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -116,7 +125,7 @@ app.use((err, req, res, next) => {
 });
 
 // Manejo de rutas no encontradas
-app.use('*', (req, res) => {
+app.use((req, res) => {
     res.status(404).json({
         success: false,
         error: 'Ruta no encontrada',
