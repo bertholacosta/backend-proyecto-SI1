@@ -57,9 +57,10 @@ const login = async (req, res) => {
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Solo usar secure en producción
-      sameSite: "Strict",
-      maxAge: 3600000,
+      secure: process.env.NODE_ENV === 'production', // HTTPS requerido en producción
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // None para cross-origin
+      maxAge: 3600000, // 1 hora
+      domain: process.env.NODE_ENV === 'production' ? undefined : 'localhost' // Sin domain en producción para cross-origin
     });
     await bitacora({
       req,
@@ -88,8 +89,9 @@ const logout = async (req, res) => {
   try {
     res.clearCookie("access_token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Solo usar secure en producción
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      domain: process.env.NODE_ENV === 'production' ? undefined : 'localhost'
     });
     await bitacora({
       req,

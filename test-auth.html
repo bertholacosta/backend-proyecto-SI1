@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Autenticación Cross-Origin</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        input { padding: 8px; margin: 5px; width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Autenticación Cross-Origin</h1>
+    
+    <div class="test-section">
+        <h3>1. Configuración</h3>
+        <p>URL del Backend: <input type="text" id="backendUrl" value="https://tu-backend.onrender.com" placeholder="URL del backend"></p>
+        <button onclick="testConnection()">🔌 Probar Conexión</button>
+        <div id="connectionResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. Debug de Cookies</h3>
+        <button onclick="debugCookies()">🍪 Verificar Cookies</button>
+        <div id="cookieResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. Login</h3>
+        <p>
+            Usuario: <input type="text" id="usuario" value="admin" placeholder="Usuario"><br>
+            Contraseña: <input type="password" id="contrasena" value="123456" placeholder="Contraseña">
+        </p>
+        <button onclick="testLogin()">🔑 Hacer Login</button>
+        <div id="loginResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>4. Verificar Sesión</h3>
+        <button onclick="verifySession()">✅ Verificar Sesión</button>
+        <div id="sessionResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>5. Obtener Usuarios</h3>
+        <button onclick="getUsers()">👥 Obtener Usuarios</button>
+        <div id="usersResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>6. Logout</h3>
+        <button onclick="testLogout()">🚪 Hacer Logout</button>
+        <div id="logoutResult"></div>
+    </div>
+
+    <script>
+        function getBackendUrl() {
+            return document.getElementById('backendUrl').value.trim();
+        }
+
+        function showResult(elementId, success, message, data = null) {
+            const element = document.getElementById(elementId);
+            element.className = success ? 'success' : 'error';
+            element.innerHTML = `
+                <strong>${success ? '✅ Éxito' : '❌ Error'}:</strong> ${message}
+                ${data ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : ''}
+            `;
+        }
+
+        async function testConnection() {
+            try {
+                const response = await fetch(`${getBackendUrl()}/`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                showResult('connectionResult', response.ok, 'Conexión exitosa', data);
+            } catch (error) {
+                showResult('connectionResult', false, `Error de conexión: ${error.message}`);
+            }
+        }
+
+        async function debugCookies() {
+            try {
+                const response = await fetch(`${getBackendUrl()}/auth/debug-cookies`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                showResult('cookieResult', response.ok, 'Debug de cookies', data);
+            } catch (error) {
+                showResult('cookieResult', false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testLogin() {
+            const usuario = document.getElementById('usuario').value;
+            const contrasena = document.getElementById('contrasena').value;
+
+            try {
+                const response = await fetch(`${getBackendUrl()}/auth/login`, {
+                    method: 'POST',
+                    credentials: 'include', // MUY IMPORTANTE
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usuario, contrasena })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Guardar token como backup
+                    localStorage.setItem('token', data.token);
+                    showResult('loginResult', true, 'Login exitoso', data);
+                } else {
+                    showResult('loginResult', false, 'Login fallido', data);
+                }
+            } catch (error) {
+                showResult('loginResult', false, `Error en login: ${error.message}`);
+            }
+        }
+
+        async function verifySession() {
+            try {
+                // Probar con cookies primero
+                let response = await fetch(`${getBackendUrl()}/auth/verificar-sesion`, {
+                    credentials: 'include'
+                });
+
+                let data = await response.json();
+                
+                if (response.ok) {
+                    showResult('sessionResult', true, 'Sesión válida (con cookies)', data);
+                } else {
+                    // Si falla con cookies, probar con token del localStorage
+                    const token = localStorage.getItem('token');
+                    if (token) {
+                        response = await fetch(`${getBackendUrl()}/auth/verificar-sesion`, {
+                            credentials: 'include',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        data = await response.json();
+                        
+                        if (response.ok) {
+                            showResult('sessionResult', true, 'Sesión válida (con token del header)', data);
+                        } else {
+                            showResult('sessionResult', false, 'Sesión inválida', data);
+                        }
+                    } else {
+                        showResult('sessionResult', false, 'No hay sesión activa', data);
+                    }
+                }
+            } catch (error) {
+                showResult('sessionResult', false, `Error verificando sesión: ${error.message}`);
+            }
+        }
+
+        async function getUsers() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${getBackendUrl()}/usuarios`, {
+                    credentials: 'include',
+                    headers: token ? {
+                        'Authorization': `Bearer ${token}`
+                    } : {}
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('usersResult', true, `Usuarios obtenidos (${data.usuarios?.length || 0})`, {
+                        total: data.pagination?.totalUsuarios,
+                        usuarios: data.usuarios?.slice(0, 3).map(u => ({ 
+                            id: u.id, 
+                            usuario: u.usuario, 
+                            email: u.email 
+                        }))
+                    });
+                } else {
+                    showResult('usersResult', false, 'Error obteniendo usuarios', data);
+                }
+            } catch (error) {
+                showResult('usersResult', false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testLogout() {
+            try {
+                const response = await fetch(`${getBackendUrl()}/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                
+                // Limpiar localStorage independientemente
+                localStorage.removeItem('token');
+                
+                showResult('logoutResult', response.ok, 'Logout completado', data);
+            } catch (error) {
+                localStorage.removeItem('token'); // Limpiar de todas formas
+                showResult('logoutResult', false, `Error en logout: ${error.message}`);
+            }
+        }
+
+        // Auto-test inicial
+        window.addEventListener('load', () => {
+            console.log('🚀 Test de autenticación cargado');
+            console.log('👉 Cambia la URL del backend y comienza con "Probar Conexión"');
+        });
+    </script>
+</body>
+</html>
