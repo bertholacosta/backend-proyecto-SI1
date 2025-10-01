@@ -1,44 +1,32 @@
 const express = require('express');
 const cors = require('cors');
+
 const app = express();
 const cookieParser = require("cookie-parser");
-const { requestLogger, errorHandler, notFoundHandler } = require('./middleware/generalMiddleware');
-const { corsOptions, securityHeaders, simpleRateLimit } = require('./middleware/securityMiddleware');
-const { sanitizeInput } = require('./middleware/validationMiddleware');
 require('dotenv').config();
-
-// Middleware de logging
-app.use(requestLogger);
-
-// Middleware de seguridad
-app.use(securityHeaders);
-
-// Rate limiting (15 minutos, máximo 100 requests por IP)
-app.use(simpleRateLimit(15 * 60 * 1000, 100));
-
-// Middleware básico
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-// CORS con configuración avanzada
-app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
-// Sanitización de entrada
-app.use(sanitizeInput);
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+}));
 
-// Rutas de la aplicación
-app.use('/empleado', require('./routes/empleadoRoute'));
-app.use('/cliente', require('./routes/clienteRoute'));
-app.use('/usuario', require('./routes/usuarioRoute'));
+app.use(express.json());
+
+app.use('/marcamoto', require('./routes/marcamotoRoute'));
+
+app.use('/usuario', require('./routes/registroRoute'));
+
 app.use('/auth', require('./routes/authRoute'));
 
-// Middleware para rutas no encontradas (debe ir después de todas las rutas)
-app.use(notFoundHandler);
+app.use('/clientes', require('./routes/clienteRoute'));
 
-// Middleware de manejo de errores (debe ir al final)
-app.use(errorHandler);
+app.use('/empleados', require('./routes/empleadoRoute'));
+
+app.use('/usuarios', require('./routes/usuarioRoute'));
 
 app.listen(3000, () => 
     console.log('Server is running on port 3000'))

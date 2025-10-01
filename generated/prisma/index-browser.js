@@ -267,6 +267,14 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   email: 'email'
 };
 
+exports.Prisma.BitacoraScalarFieldEnum = {
+  id_bitacora: 'id_bitacora',
+  usuario_id: 'usuario_id',
+  descripcion: 'descripcion',
+  fecha_hora: 'fecha_hora',
+  ip_origen: 'ip_origen'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -321,7 +329,8 @@ exports.Prisma.ModelName = {
   proforma: 'proforma',
   proforma_repuesto: 'proforma_repuesto',
   servicio: 'servicio',
-  usuario: 'usuario'
+  usuario: 'usuario',
+  bitacora: 'bitacora'
 };
 
 /**

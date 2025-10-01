@@ -1,13 +1,11 @@
 const router = require("express").Router();
-const authController = require("../controllers/authController");
-const { loginValidation } = require("../middleware/validationMiddleware");
-const { verifyToken } = require("../middleware/authMiddleware");
+const authMiddleware = require("../middlewares/authMiddleware");
+const authController = require("../controllers/authController");  
 
-router.post("/login", loginValidation, authController.login); 
+router.post("/login", authController.login); 
 
-router.post("/logout", verifyToken, authController.logout);
+router.post("/logout", authMiddleware, authController.logout);
 
-// Ruta para verificar sesión actual
-router.get("/verify", verifyToken, authController.verifySession);
+router.get("/verificar", authMiddleware, authController.verificarSesion);
 
 module.exports = router;

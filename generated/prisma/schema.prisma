@@ -217,6 +217,16 @@ model usuario {
   email         String?        @unique @db.VarChar(150)
   administrador administrador?
   empleado      empleado       @relation(fields: [empleado_ci], references: [ci], onDelete: Cascade)
+  bitacora      bitacora[]
+}
+
+model bitacora {
+  id_bitacora BigInt   @id @default(autoincrement())
+  usuario_id  Int
+  descripcion String?
+  fecha_hora  DateTime @default(now()) @db.Timestamptz(6)
+  ip_origen   String?  @db.VarChar(45)
+  usuario     usuario  @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum estado_orden {

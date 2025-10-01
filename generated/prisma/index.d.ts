@@ -118,6 +118,11 @@ export type servicio = $Result.DefaultSelection<Prisma.$servicioPayload>
  * 
  */
 export type usuario = $Result.DefaultSelection<Prisma.$usuarioPayload>
+/**
+ * Model bitacora
+ * 
+ */
+export type bitacora = $Result.DefaultSelection<Prisma.$bitacoraPayload>
 
 /**
  * Enums
@@ -491,6 +496,16 @@ export class PrismaClient<
     * ```
     */
   get usuario(): Prisma.usuarioDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bitacora`: Exposes CRUD operations for the **bitacora** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Bitacoras
+    * const bitacoras = await prisma.bitacora.findMany()
+    * ```
+    */
+  get bitacora(): Prisma.bitacoraDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -951,7 +966,8 @@ export namespace Prisma {
     proforma: 'proforma',
     proforma_repuesto: 'proforma_repuesto',
     servicio: 'servicio',
-    usuario: 'usuario'
+    usuario: 'usuario',
+    bitacora: 'bitacora'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -970,7 +986,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "administrador" | "categoria" | "cliente" | "comision" | "detalle_diagnostico" | "detalle_proforma" | "diagnostico" | "empleado" | "factura" | "herramienta" | "horario" | "horario_empleado" | "marca_herramienta" | "marca_moto" | "moto" | "movimiento_herramienta" | "orden_trabajo" | "proforma" | "proforma_repuesto" | "servicio" | "usuario"
+      modelProps: "administrador" | "categoria" | "cliente" | "comision" | "detalle_diagnostico" | "detalle_proforma" | "diagnostico" | "empleado" | "factura" | "herramienta" | "horario" | "horario_empleado" | "marca_herramienta" | "marca_moto" | "moto" | "movimiento_herramienta" | "orden_trabajo" | "proforma" | "proforma_repuesto" | "servicio" | "usuario" | "bitacora"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2528,6 +2544,80 @@ export namespace Prisma {
           }
         }
       }
+      bitacora: {
+        payload: Prisma.$bitacoraPayload<ExtArgs>
+        fields: Prisma.bitacoraFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.bitacoraFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.bitacoraFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>
+          }
+          findFirst: {
+            args: Prisma.bitacoraFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.bitacoraFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>
+          }
+          findMany: {
+            args: Prisma.bitacoraFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>[]
+          }
+          create: {
+            args: Prisma.bitacoraCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>
+          }
+          createMany: {
+            args: Prisma.bitacoraCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.bitacoraCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>[]
+          }
+          delete: {
+            args: Prisma.bitacoraDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>
+          }
+          update: {
+            args: Prisma.bitacoraUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>
+          }
+          deleteMany: {
+            args: Prisma.bitacoraDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.bitacoraUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.bitacoraUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>[]
+          }
+          upsert: {
+            args: Prisma.bitacoraUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bitacoraPayload>
+          }
+          aggregate: {
+            args: Prisma.BitacoraAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBitacora>
+          }
+          groupBy: {
+            args: Prisma.bitacoraGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BitacoraGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.bitacoraCountArgs<ExtArgs>
+            result: $Utils.Optional<BitacoraCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2645,6 +2735,7 @@ export namespace Prisma {
     proforma_repuesto?: proforma_repuestoOmit
     servicio?: servicioOmit
     usuario?: usuarioOmit
+    bitacora?: bitacoraOmit
   }
 
   /* Types for Logging */
@@ -3165,6 +3256,37 @@ export namespace Prisma {
    */
   export type ServicioCountOutputTypeCountOrden_trabajoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: orden_trabajoWhereInput
+  }
+
+
+  /**
+   * Count Type UsuarioCountOutputType
+   */
+
+  export type UsuarioCountOutputType = {
+    bitacora: number
+  }
+
+  export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bitacora?: boolean | UsuarioCountOutputTypeCountBitacoraArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsuarioCountOutputType
+     */
+    select?: UsuarioCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountBitacoraArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: bitacoraWhereInput
   }
 
 
@@ -25670,6 +25792,8 @@ export namespace Prisma {
     email?: boolean
     administrador?: boolean | usuario$administradorArgs<ExtArgs>
     empleado?: boolean | empleadoDefaultArgs<ExtArgs>
+    bitacora?: boolean | usuario$bitacoraArgs<ExtArgs>
+    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
   export type usuarioSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -25702,6 +25826,8 @@ export namespace Prisma {
   export type usuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     administrador?: boolean | usuario$administradorArgs<ExtArgs>
     empleado?: boolean | empleadoDefaultArgs<ExtArgs>
+    bitacora?: boolean | usuario$bitacoraArgs<ExtArgs>
+    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type usuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     empleado?: boolean | empleadoDefaultArgs<ExtArgs>
@@ -25715,6 +25841,7 @@ export namespace Prisma {
     objects: {
       administrador: Prisma.$administradorPayload<ExtArgs> | null
       empleado: Prisma.$empleadoPayload<ExtArgs>
+      bitacora: Prisma.$bitacoraPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -26118,6 +26245,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     administrador<T extends usuario$administradorArgs<ExtArgs> = {}>(args?: Subset<T, usuario$administradorArgs<ExtArgs>>): Prisma__administradorClient<$Result.GetResult<Prisma.$administradorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     empleado<T extends empleadoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, empleadoDefaultArgs<ExtArgs>>): Prisma__empleadoClient<$Result.GetResult<Prisma.$empleadoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    bitacora<T extends usuario$bitacoraArgs<ExtArgs> = {}>(args?: Subset<T, usuario$bitacoraArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26567,6 +26695,30 @@ export namespace Prisma {
   }
 
   /**
+   * usuario.bitacora
+   */
+  export type usuario$bitacoraArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    where?: bitacoraWhereInput
+    orderBy?: bitacoraOrderByWithRelationInput | bitacoraOrderByWithRelationInput[]
+    cursor?: bitacoraWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BitacoraScalarFieldEnum | BitacoraScalarFieldEnum[]
+  }
+
+  /**
    * usuario without action
    */
   export type usuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -26582,6 +26734,1121 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: usuarioInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model bitacora
+   */
+
+  export type AggregateBitacora = {
+    _count: BitacoraCountAggregateOutputType | null
+    _avg: BitacoraAvgAggregateOutputType | null
+    _sum: BitacoraSumAggregateOutputType | null
+    _min: BitacoraMinAggregateOutputType | null
+    _max: BitacoraMaxAggregateOutputType | null
+  }
+
+  export type BitacoraAvgAggregateOutputType = {
+    id_bitacora: number | null
+    usuario_id: number | null
+  }
+
+  export type BitacoraSumAggregateOutputType = {
+    id_bitacora: bigint | null
+    usuario_id: number | null
+  }
+
+  export type BitacoraMinAggregateOutputType = {
+    id_bitacora: bigint | null
+    usuario_id: number | null
+    descripcion: string | null
+    fecha_hora: Date | null
+    ip_origen: string | null
+  }
+
+  export type BitacoraMaxAggregateOutputType = {
+    id_bitacora: bigint | null
+    usuario_id: number | null
+    descripcion: string | null
+    fecha_hora: Date | null
+    ip_origen: string | null
+  }
+
+  export type BitacoraCountAggregateOutputType = {
+    id_bitacora: number
+    usuario_id: number
+    descripcion: number
+    fecha_hora: number
+    ip_origen: number
+    _all: number
+  }
+
+
+  export type BitacoraAvgAggregateInputType = {
+    id_bitacora?: true
+    usuario_id?: true
+  }
+
+  export type BitacoraSumAggregateInputType = {
+    id_bitacora?: true
+    usuario_id?: true
+  }
+
+  export type BitacoraMinAggregateInputType = {
+    id_bitacora?: true
+    usuario_id?: true
+    descripcion?: true
+    fecha_hora?: true
+    ip_origen?: true
+  }
+
+  export type BitacoraMaxAggregateInputType = {
+    id_bitacora?: true
+    usuario_id?: true
+    descripcion?: true
+    fecha_hora?: true
+    ip_origen?: true
+  }
+
+  export type BitacoraCountAggregateInputType = {
+    id_bitacora?: true
+    usuario_id?: true
+    descripcion?: true
+    fecha_hora?: true
+    ip_origen?: true
+    _all?: true
+  }
+
+  export type BitacoraAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which bitacora to aggregate.
+     */
+    where?: bitacoraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bitacoras to fetch.
+     */
+    orderBy?: bitacoraOrderByWithRelationInput | bitacoraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: bitacoraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bitacoras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bitacoras.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned bitacoras
+    **/
+    _count?: true | BitacoraCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BitacoraAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BitacoraSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BitacoraMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BitacoraMaxAggregateInputType
+  }
+
+  export type GetBitacoraAggregateType<T extends BitacoraAggregateArgs> = {
+        [P in keyof T & keyof AggregateBitacora]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBitacora[P]>
+      : GetScalarType<T[P], AggregateBitacora[P]>
+  }
+
+
+
+
+  export type bitacoraGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: bitacoraWhereInput
+    orderBy?: bitacoraOrderByWithAggregationInput | bitacoraOrderByWithAggregationInput[]
+    by: BitacoraScalarFieldEnum[] | BitacoraScalarFieldEnum
+    having?: bitacoraScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BitacoraCountAggregateInputType | true
+    _avg?: BitacoraAvgAggregateInputType
+    _sum?: BitacoraSumAggregateInputType
+    _min?: BitacoraMinAggregateInputType
+    _max?: BitacoraMaxAggregateInputType
+  }
+
+  export type BitacoraGroupByOutputType = {
+    id_bitacora: bigint
+    usuario_id: number | null
+    descripcion: string | null
+    fecha_hora: Date
+    ip_origen: string | null
+    _count: BitacoraCountAggregateOutputType | null
+    _avg: BitacoraAvgAggregateOutputType | null
+    _sum: BitacoraSumAggregateOutputType | null
+    _min: BitacoraMinAggregateOutputType | null
+    _max: BitacoraMaxAggregateOutputType | null
+  }
+
+  type GetBitacoraGroupByPayload<T extends bitacoraGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BitacoraGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BitacoraGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BitacoraGroupByOutputType[P]>
+            : GetScalarType<T[P], BitacoraGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type bitacoraSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_bitacora?: boolean
+    usuario_id?: boolean
+    descripcion?: boolean
+    fecha_hora?: boolean
+    ip_origen?: boolean
+    usuario?: boolean | bitacora$usuarioArgs<ExtArgs>
+  }, ExtArgs["result"]["bitacora"]>
+
+  export type bitacoraSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_bitacora?: boolean
+    usuario_id?: boolean
+    descripcion?: boolean
+    fecha_hora?: boolean
+    ip_origen?: boolean
+    usuario?: boolean | bitacora$usuarioArgs<ExtArgs>
+  }, ExtArgs["result"]["bitacora"]>
+
+  export type bitacoraSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_bitacora?: boolean
+    usuario_id?: boolean
+    descripcion?: boolean
+    fecha_hora?: boolean
+    ip_origen?: boolean
+    usuario?: boolean | bitacora$usuarioArgs<ExtArgs>
+  }, ExtArgs["result"]["bitacora"]>
+
+  export type bitacoraSelectScalar = {
+    id_bitacora?: boolean
+    usuario_id?: boolean
+    descripcion?: boolean
+    fecha_hora?: boolean
+    ip_origen?: boolean
+  }
+
+  export type bitacoraOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_bitacora" | "usuario_id" | "descripcion" | "fecha_hora" | "ip_origen", ExtArgs["result"]["bitacora"]>
+  export type bitacoraInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | bitacora$usuarioArgs<ExtArgs>
+  }
+  export type bitacoraIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | bitacora$usuarioArgs<ExtArgs>
+  }
+  export type bitacoraIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | bitacora$usuarioArgs<ExtArgs>
+  }
+
+  export type $bitacoraPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "bitacora"
+    objects: {
+      usuario: Prisma.$usuarioPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_bitacora: bigint
+      usuario_id: number | null
+      descripcion: string | null
+      fecha_hora: Date
+      ip_origen: string | null
+    }, ExtArgs["result"]["bitacora"]>
+    composites: {}
+  }
+
+  type bitacoraGetPayload<S extends boolean | null | undefined | bitacoraDefaultArgs> = $Result.GetResult<Prisma.$bitacoraPayload, S>
+
+  type bitacoraCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<bitacoraFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BitacoraCountAggregateInputType | true
+    }
+
+  export interface bitacoraDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['bitacora'], meta: { name: 'bitacora' } }
+    /**
+     * Find zero or one Bitacora that matches the filter.
+     * @param {bitacoraFindUniqueArgs} args - Arguments to find a Bitacora
+     * @example
+     * // Get one Bitacora
+     * const bitacora = await prisma.bitacora.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends bitacoraFindUniqueArgs>(args: SelectSubset<T, bitacoraFindUniqueArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Bitacora that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {bitacoraFindUniqueOrThrowArgs} args - Arguments to find a Bitacora
+     * @example
+     * // Get one Bitacora
+     * const bitacora = await prisma.bitacora.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends bitacoraFindUniqueOrThrowArgs>(args: SelectSubset<T, bitacoraFindUniqueOrThrowArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Bitacora that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bitacoraFindFirstArgs} args - Arguments to find a Bitacora
+     * @example
+     * // Get one Bitacora
+     * const bitacora = await prisma.bitacora.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends bitacoraFindFirstArgs>(args?: SelectSubset<T, bitacoraFindFirstArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Bitacora that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bitacoraFindFirstOrThrowArgs} args - Arguments to find a Bitacora
+     * @example
+     * // Get one Bitacora
+     * const bitacora = await prisma.bitacora.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends bitacoraFindFirstOrThrowArgs>(args?: SelectSubset<T, bitacoraFindFirstOrThrowArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Bitacoras that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bitacoraFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Bitacoras
+     * const bitacoras = await prisma.bitacora.findMany()
+     * 
+     * // Get first 10 Bitacoras
+     * const bitacoras = await prisma.bitacora.findMany({ take: 10 })
+     * 
+     * // Only select the `id_bitacora`
+     * const bitacoraWithId_bitacoraOnly = await prisma.bitacora.findMany({ select: { id_bitacora: true } })
+     * 
+     */
+    findMany<T extends bitacoraFindManyArgs>(args?: SelectSubset<T, bitacoraFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Bitacora.
+     * @param {bitacoraCreateArgs} args - Arguments to create a Bitacora.
+     * @example
+     * // Create one Bitacora
+     * const Bitacora = await prisma.bitacora.create({
+     *   data: {
+     *     // ... data to create a Bitacora
+     *   }
+     * })
+     * 
+     */
+    create<T extends bitacoraCreateArgs>(args: SelectSubset<T, bitacoraCreateArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Bitacoras.
+     * @param {bitacoraCreateManyArgs} args - Arguments to create many Bitacoras.
+     * @example
+     * // Create many Bitacoras
+     * const bitacora = await prisma.bitacora.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends bitacoraCreateManyArgs>(args?: SelectSubset<T, bitacoraCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Bitacoras and returns the data saved in the database.
+     * @param {bitacoraCreateManyAndReturnArgs} args - Arguments to create many Bitacoras.
+     * @example
+     * // Create many Bitacoras
+     * const bitacora = await prisma.bitacora.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Bitacoras and only return the `id_bitacora`
+     * const bitacoraWithId_bitacoraOnly = await prisma.bitacora.createManyAndReturn({
+     *   select: { id_bitacora: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends bitacoraCreateManyAndReturnArgs>(args?: SelectSubset<T, bitacoraCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Bitacora.
+     * @param {bitacoraDeleteArgs} args - Arguments to delete one Bitacora.
+     * @example
+     * // Delete one Bitacora
+     * const Bitacora = await prisma.bitacora.delete({
+     *   where: {
+     *     // ... filter to delete one Bitacora
+     *   }
+     * })
+     * 
+     */
+    delete<T extends bitacoraDeleteArgs>(args: SelectSubset<T, bitacoraDeleteArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Bitacora.
+     * @param {bitacoraUpdateArgs} args - Arguments to update one Bitacora.
+     * @example
+     * // Update one Bitacora
+     * const bitacora = await prisma.bitacora.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends bitacoraUpdateArgs>(args: SelectSubset<T, bitacoraUpdateArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Bitacoras.
+     * @param {bitacoraDeleteManyArgs} args - Arguments to filter Bitacoras to delete.
+     * @example
+     * // Delete a few Bitacoras
+     * const { count } = await prisma.bitacora.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends bitacoraDeleteManyArgs>(args?: SelectSubset<T, bitacoraDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bitacoras.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bitacoraUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Bitacoras
+     * const bitacora = await prisma.bitacora.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends bitacoraUpdateManyArgs>(args: SelectSubset<T, bitacoraUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bitacoras and returns the data updated in the database.
+     * @param {bitacoraUpdateManyAndReturnArgs} args - Arguments to update many Bitacoras.
+     * @example
+     * // Update many Bitacoras
+     * const bitacora = await prisma.bitacora.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Bitacoras and only return the `id_bitacora`
+     * const bitacoraWithId_bitacoraOnly = await prisma.bitacora.updateManyAndReturn({
+     *   select: { id_bitacora: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends bitacoraUpdateManyAndReturnArgs>(args: SelectSubset<T, bitacoraUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Bitacora.
+     * @param {bitacoraUpsertArgs} args - Arguments to update or create a Bitacora.
+     * @example
+     * // Update or create a Bitacora
+     * const bitacora = await prisma.bitacora.upsert({
+     *   create: {
+     *     // ... data to create a Bitacora
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Bitacora we want to update
+     *   }
+     * })
+     */
+    upsert<T extends bitacoraUpsertArgs>(args: SelectSubset<T, bitacoraUpsertArgs<ExtArgs>>): Prisma__bitacoraClient<$Result.GetResult<Prisma.$bitacoraPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Bitacoras.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bitacoraCountArgs} args - Arguments to filter Bitacoras to count.
+     * @example
+     * // Count the number of Bitacoras
+     * const count = await prisma.bitacora.count({
+     *   where: {
+     *     // ... the filter for the Bitacoras we want to count
+     *   }
+     * })
+    **/
+    count<T extends bitacoraCountArgs>(
+      args?: Subset<T, bitacoraCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BitacoraCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Bitacora.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BitacoraAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BitacoraAggregateArgs>(args: Subset<T, BitacoraAggregateArgs>): Prisma.PrismaPromise<GetBitacoraAggregateType<T>>
+
+    /**
+     * Group by Bitacora.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bitacoraGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends bitacoraGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: bitacoraGroupByArgs['orderBy'] }
+        : { orderBy?: bitacoraGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, bitacoraGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBitacoraGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the bitacora model
+   */
+  readonly fields: bitacoraFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for bitacora.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__bitacoraClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends bitacora$usuarioArgs<ExtArgs> = {}>(args?: Subset<T, bitacora$usuarioArgs<ExtArgs>>): Prisma__usuarioClient<$Result.GetResult<Prisma.$usuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the bitacora model
+   */
+  interface bitacoraFieldRefs {
+    readonly id_bitacora: FieldRef<"bitacora", 'BigInt'>
+    readonly usuario_id: FieldRef<"bitacora", 'Int'>
+    readonly descripcion: FieldRef<"bitacora", 'String'>
+    readonly fecha_hora: FieldRef<"bitacora", 'DateTime'>
+    readonly ip_origen: FieldRef<"bitacora", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * bitacora findUnique
+   */
+  export type bitacoraFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * Filter, which bitacora to fetch.
+     */
+    where: bitacoraWhereUniqueInput
+  }
+
+  /**
+   * bitacora findUniqueOrThrow
+   */
+  export type bitacoraFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * Filter, which bitacora to fetch.
+     */
+    where: bitacoraWhereUniqueInput
+  }
+
+  /**
+   * bitacora findFirst
+   */
+  export type bitacoraFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * Filter, which bitacora to fetch.
+     */
+    where?: bitacoraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bitacoras to fetch.
+     */
+    orderBy?: bitacoraOrderByWithRelationInput | bitacoraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for bitacoras.
+     */
+    cursor?: bitacoraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bitacoras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bitacoras.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of bitacoras.
+     */
+    distinct?: BitacoraScalarFieldEnum | BitacoraScalarFieldEnum[]
+  }
+
+  /**
+   * bitacora findFirstOrThrow
+   */
+  export type bitacoraFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * Filter, which bitacora to fetch.
+     */
+    where?: bitacoraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bitacoras to fetch.
+     */
+    orderBy?: bitacoraOrderByWithRelationInput | bitacoraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for bitacoras.
+     */
+    cursor?: bitacoraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bitacoras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bitacoras.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of bitacoras.
+     */
+    distinct?: BitacoraScalarFieldEnum | BitacoraScalarFieldEnum[]
+  }
+
+  /**
+   * bitacora findMany
+   */
+  export type bitacoraFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * Filter, which bitacoras to fetch.
+     */
+    where?: bitacoraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bitacoras to fetch.
+     */
+    orderBy?: bitacoraOrderByWithRelationInput | bitacoraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing bitacoras.
+     */
+    cursor?: bitacoraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bitacoras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bitacoras.
+     */
+    skip?: number
+    distinct?: BitacoraScalarFieldEnum | BitacoraScalarFieldEnum[]
+  }
+
+  /**
+   * bitacora create
+   */
+  export type bitacoraCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * The data needed to create a bitacora.
+     */
+    data?: XOR<bitacoraCreateInput, bitacoraUncheckedCreateInput>
+  }
+
+  /**
+   * bitacora createMany
+   */
+  export type bitacoraCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many bitacoras.
+     */
+    data: bitacoraCreateManyInput | bitacoraCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * bitacora createManyAndReturn
+   */
+  export type bitacoraCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * The data used to create many bitacoras.
+     */
+    data: bitacoraCreateManyInput | bitacoraCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * bitacora update
+   */
+  export type bitacoraUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * The data needed to update a bitacora.
+     */
+    data: XOR<bitacoraUpdateInput, bitacoraUncheckedUpdateInput>
+    /**
+     * Choose, which bitacora to update.
+     */
+    where: bitacoraWhereUniqueInput
+  }
+
+  /**
+   * bitacora updateMany
+   */
+  export type bitacoraUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update bitacoras.
+     */
+    data: XOR<bitacoraUpdateManyMutationInput, bitacoraUncheckedUpdateManyInput>
+    /**
+     * Filter which bitacoras to update
+     */
+    where?: bitacoraWhereInput
+    /**
+     * Limit how many bitacoras to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * bitacora updateManyAndReturn
+   */
+  export type bitacoraUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * The data used to update bitacoras.
+     */
+    data: XOR<bitacoraUpdateManyMutationInput, bitacoraUncheckedUpdateManyInput>
+    /**
+     * Filter which bitacoras to update
+     */
+    where?: bitacoraWhereInput
+    /**
+     * Limit how many bitacoras to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * bitacora upsert
+   */
+  export type bitacoraUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * The filter to search for the bitacora to update in case it exists.
+     */
+    where: bitacoraWhereUniqueInput
+    /**
+     * In case the bitacora found by the `where` argument doesn't exist, create a new bitacora with this data.
+     */
+    create: XOR<bitacoraCreateInput, bitacoraUncheckedCreateInput>
+    /**
+     * In case the bitacora was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<bitacoraUpdateInput, bitacoraUncheckedUpdateInput>
+  }
+
+  /**
+   * bitacora delete
+   */
+  export type bitacoraDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
+    /**
+     * Filter which bitacora to delete.
+     */
+    where: bitacoraWhereUniqueInput
+  }
+
+  /**
+   * bitacora deleteMany
+   */
+  export type bitacoraDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which bitacoras to delete
+     */
+    where?: bitacoraWhereInput
+    /**
+     * Limit how many bitacoras to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * bitacora.usuario
+   */
+  export type bitacora$usuarioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the usuario
+     */
+    select?: usuarioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the usuario
+     */
+    omit?: usuarioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usuarioInclude<ExtArgs> | null
+    where?: usuarioWhereInput
+  }
+
+  /**
+   * bitacora without action
+   */
+  export type bitacoraDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bitacora
+     */
+    select?: bitacoraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bitacora
+     */
+    omit?: bitacoraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bitacoraInclude<ExtArgs> | null
   }
 
 
@@ -26807,6 +28074,17 @@ export namespace Prisma {
   };
 
   export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+
+
+  export const BitacoraScalarFieldEnum: {
+    id_bitacora: 'id_bitacora',
+    usuario_id: 'usuario_id',
+    descripcion: 'descripcion',
+    fecha_hora: 'fecha_hora',
+    ip_origen: 'ip_origen'
+  };
+
+  export type BitacoraScalarFieldEnum = (typeof BitacoraScalarFieldEnum)[keyof typeof BitacoraScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -28084,6 +29362,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"usuario"> | string | null
     administrador?: XOR<AdministradorNullableScalarRelationFilter, administradorWhereInput> | null
     empleado?: XOR<EmpleadoScalarRelationFilter, empleadoWhereInput>
+    bitacora?: BitacoraListRelationFilter
   }
 
   export type usuarioOrderByWithRelationInput = {
@@ -28094,6 +29373,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     administrador?: administradorOrderByWithRelationInput
     empleado?: empleadoOrderByWithRelationInput
+    bitacora?: bitacoraOrderByRelationAggregateInput
   }
 
   export type usuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -28107,6 +29387,7 @@ export namespace Prisma {
     contrasena?: StringFilter<"usuario"> | string
     administrador?: XOR<AdministradorNullableScalarRelationFilter, administradorWhereInput> | null
     empleado?: XOR<EmpleadoScalarRelationFilter, empleadoWhereInput>
+    bitacora?: BitacoraListRelationFilter
   }, "id" | "empleado_ci" | "usuario" | "email">
 
   export type usuarioOrderByWithAggregationInput = {
@@ -28131,6 +29412,63 @@ export namespace Prisma {
     usuario?: StringWithAggregatesFilter<"usuario"> | string
     contrasena?: StringWithAggregatesFilter<"usuario"> | string
     email?: StringNullableWithAggregatesFilter<"usuario"> | string | null
+  }
+
+  export type bitacoraWhereInput = {
+    AND?: bitacoraWhereInput | bitacoraWhereInput[]
+    OR?: bitacoraWhereInput[]
+    NOT?: bitacoraWhereInput | bitacoraWhereInput[]
+    id_bitacora?: BigIntFilter<"bitacora"> | bigint | number
+    usuario_id?: IntNullableFilter<"bitacora"> | number | null
+    descripcion?: StringNullableFilter<"bitacora"> | string | null
+    fecha_hora?: DateTimeFilter<"bitacora"> | Date | string
+    ip_origen?: StringNullableFilter<"bitacora"> | string | null
+    usuario?: XOR<UsuarioNullableScalarRelationFilter, usuarioWhereInput> | null
+  }
+
+  export type bitacoraOrderByWithRelationInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrderInput | SortOrder
+    descripcion?: SortOrderInput | SortOrder
+    fecha_hora?: SortOrder
+    ip_origen?: SortOrderInput | SortOrder
+    usuario?: usuarioOrderByWithRelationInput
+  }
+
+  export type bitacoraWhereUniqueInput = Prisma.AtLeast<{
+    id_bitacora?: bigint | number
+    AND?: bitacoraWhereInput | bitacoraWhereInput[]
+    OR?: bitacoraWhereInput[]
+    NOT?: bitacoraWhereInput | bitacoraWhereInput[]
+    usuario_id?: IntNullableFilter<"bitacora"> | number | null
+    descripcion?: StringNullableFilter<"bitacora"> | string | null
+    fecha_hora?: DateTimeFilter<"bitacora"> | Date | string
+    ip_origen?: StringNullableFilter<"bitacora"> | string | null
+    usuario?: XOR<UsuarioNullableScalarRelationFilter, usuarioWhereInput> | null
+  }, "id_bitacora">
+
+  export type bitacoraOrderByWithAggregationInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrderInput | SortOrder
+    descripcion?: SortOrderInput | SortOrder
+    fecha_hora?: SortOrder
+    ip_origen?: SortOrderInput | SortOrder
+    _count?: bitacoraCountOrderByAggregateInput
+    _avg?: bitacoraAvgOrderByAggregateInput
+    _max?: bitacoraMaxOrderByAggregateInput
+    _min?: bitacoraMinOrderByAggregateInput
+    _sum?: bitacoraSumOrderByAggregateInput
+  }
+
+  export type bitacoraScalarWhereWithAggregatesInput = {
+    AND?: bitacoraScalarWhereWithAggregatesInput | bitacoraScalarWhereWithAggregatesInput[]
+    OR?: bitacoraScalarWhereWithAggregatesInput[]
+    NOT?: bitacoraScalarWhereWithAggregatesInput | bitacoraScalarWhereWithAggregatesInput[]
+    id_bitacora?: BigIntWithAggregatesFilter<"bitacora"> | bigint | number
+    usuario_id?: IntNullableWithAggregatesFilter<"bitacora"> | number | null
+    descripcion?: StringNullableWithAggregatesFilter<"bitacora"> | string | null
+    fecha_hora?: DateTimeWithAggregatesFilter<"bitacora"> | Date | string
+    ip_origen?: StringNullableWithAggregatesFilter<"bitacora"> | string | null
   }
 
   export type administradorCreateInput = {
@@ -29149,6 +30487,7 @@ export namespace Prisma {
     email?: string | null
     administrador?: administradorCreateNestedOneWithoutUsuarioInput
     empleado: empleadoCreateNestedOneWithoutUsuarioInput
+    bitacora?: bitacoraCreateNestedManyWithoutUsuarioInput
   }
 
   export type usuarioUncheckedCreateInput = {
@@ -29158,6 +30497,7 @@ export namespace Prisma {
     contrasena: string
     email?: string | null
     administrador?: administradorUncheckedCreateNestedOneWithoutUsuarioInput
+    bitacora?: bitacoraUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type usuarioUpdateInput = {
@@ -29166,6 +30506,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     administrador?: administradorUpdateOneWithoutUsuarioNestedInput
     empleado?: empleadoUpdateOneRequiredWithoutUsuarioNestedInput
+    bitacora?: bitacoraUpdateManyWithoutUsuarioNestedInput
   }
 
   export type usuarioUncheckedUpdateInput = {
@@ -29175,6 +30516,7 @@ export namespace Prisma {
     contrasena?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     administrador?: administradorUncheckedUpdateOneWithoutUsuarioNestedInput
+    bitacora?: bitacoraUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type usuarioCreateManyInput = {
@@ -29197,6 +30539,61 @@ export namespace Prisma {
     usuario?: StringFieldUpdateOperationsInput | string
     contrasena?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type bitacoraCreateInput = {
+    id_bitacora?: bigint | number
+    descripcion?: string | null
+    fecha_hora?: Date | string
+    ip_origen?: string | null
+    usuario?: usuarioCreateNestedOneWithoutBitacoraInput
+  }
+
+  export type bitacoraUncheckedCreateInput = {
+    id_bitacora?: bigint | number
+    usuario_id?: number | null
+    descripcion?: string | null
+    fecha_hora?: Date | string
+    ip_origen?: string | null
+  }
+
+  export type bitacoraUpdateInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
+    usuario?: usuarioUpdateOneWithoutBitacoraNestedInput
+  }
+
+  export type bitacoraUncheckedUpdateInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    usuario_id?: NullableIntFieldUpdateOperationsInput | number | null
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type bitacoraCreateManyInput = {
+    id_bitacora?: bigint | number
+    usuario_id?: number | null
+    descripcion?: string | null
+    fecha_hora?: Date | string
+    ip_origen?: string | null
+  }
+
+  export type bitacoraUpdateManyMutationInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type bitacoraUncheckedUpdateManyInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    usuario_id?: NullableIntFieldUpdateOperationsInput | number | null
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -30408,6 +31805,16 @@ export namespace Prisma {
     categoria_id?: SortOrder
   }
 
+  export type BitacoraListRelationFilter = {
+    every?: bitacoraWhereInput
+    some?: bitacoraWhereInput
+    none?: bitacoraWhereInput
+  }
+
+  export type bitacoraOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type usuarioCountOrderByAggregateInput = {
     id?: SortOrder
     empleado_ci?: SortOrder
@@ -30440,6 +31847,40 @@ export namespace Prisma {
   export type usuarioSumOrderByAggregateInput = {
     id?: SortOrder
     empleado_ci?: SortOrder
+  }
+
+  export type bitacoraCountOrderByAggregateInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrder
+    descripcion?: SortOrder
+    fecha_hora?: SortOrder
+    ip_origen?: SortOrder
+  }
+
+  export type bitacoraAvgOrderByAggregateInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrder
+  }
+
+  export type bitacoraMaxOrderByAggregateInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrder
+    descripcion?: SortOrder
+    fecha_hora?: SortOrder
+    ip_origen?: SortOrder
+  }
+
+  export type bitacoraMinOrderByAggregateInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrder
+    descripcion?: SortOrder
+    fecha_hora?: SortOrder
+    ip_origen?: SortOrder
+  }
+
+  export type bitacoraSumOrderByAggregateInput = {
+    id_bitacora?: SortOrder
+    usuario_id?: SortOrder
   }
 
   export type usuarioCreateNestedOneWithoutAdministradorInput = {
@@ -31684,10 +33125,24 @@ export namespace Prisma {
     connect?: empleadoWhereUniqueInput
   }
 
+  export type bitacoraCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<bitacoraCreateWithoutUsuarioInput, bitacoraUncheckedCreateWithoutUsuarioInput> | bitacoraCreateWithoutUsuarioInput[] | bitacoraUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: bitacoraCreateOrConnectWithoutUsuarioInput | bitacoraCreateOrConnectWithoutUsuarioInput[]
+    createMany?: bitacoraCreateManyUsuarioInputEnvelope
+    connect?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+  }
+
   export type administradorUncheckedCreateNestedOneWithoutUsuarioInput = {
     create?: XOR<administradorCreateWithoutUsuarioInput, administradorUncheckedCreateWithoutUsuarioInput>
     connectOrCreate?: administradorCreateOrConnectWithoutUsuarioInput
     connect?: administradorWhereUniqueInput
+  }
+
+  export type bitacoraUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<bitacoraCreateWithoutUsuarioInput, bitacoraUncheckedCreateWithoutUsuarioInput> | bitacoraCreateWithoutUsuarioInput[] | bitacoraUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: bitacoraCreateOrConnectWithoutUsuarioInput | bitacoraCreateOrConnectWithoutUsuarioInput[]
+    createMany?: bitacoraCreateManyUsuarioInputEnvelope
+    connect?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
   }
 
   export type administradorUpdateOneWithoutUsuarioNestedInput = {
@@ -31708,6 +33163,20 @@ export namespace Prisma {
     update?: XOR<XOR<empleadoUpdateToOneWithWhereWithoutUsuarioInput, empleadoUpdateWithoutUsuarioInput>, empleadoUncheckedUpdateWithoutUsuarioInput>
   }
 
+  export type bitacoraUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<bitacoraCreateWithoutUsuarioInput, bitacoraUncheckedCreateWithoutUsuarioInput> | bitacoraCreateWithoutUsuarioInput[] | bitacoraUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: bitacoraCreateOrConnectWithoutUsuarioInput | bitacoraCreateOrConnectWithoutUsuarioInput[]
+    upsert?: bitacoraUpsertWithWhereUniqueWithoutUsuarioInput | bitacoraUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: bitacoraCreateManyUsuarioInputEnvelope
+    set?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    disconnect?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    delete?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    connect?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    update?: bitacoraUpdateWithWhereUniqueWithoutUsuarioInput | bitacoraUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: bitacoraUpdateManyWithWhereWithoutUsuarioInput | bitacoraUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: bitacoraScalarWhereInput | bitacoraScalarWhereInput[]
+  }
+
   export type administradorUncheckedUpdateOneWithoutUsuarioNestedInput = {
     create?: XOR<administradorCreateWithoutUsuarioInput, administradorUncheckedCreateWithoutUsuarioInput>
     connectOrCreate?: administradorCreateOrConnectWithoutUsuarioInput
@@ -31716,6 +33185,36 @@ export namespace Prisma {
     delete?: administradorWhereInput | boolean
     connect?: administradorWhereUniqueInput
     update?: XOR<XOR<administradorUpdateToOneWithWhereWithoutUsuarioInput, administradorUpdateWithoutUsuarioInput>, administradorUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type bitacoraUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<bitacoraCreateWithoutUsuarioInput, bitacoraUncheckedCreateWithoutUsuarioInput> | bitacoraCreateWithoutUsuarioInput[] | bitacoraUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: bitacoraCreateOrConnectWithoutUsuarioInput | bitacoraCreateOrConnectWithoutUsuarioInput[]
+    upsert?: bitacoraUpsertWithWhereUniqueWithoutUsuarioInput | bitacoraUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: bitacoraCreateManyUsuarioInputEnvelope
+    set?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    disconnect?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    delete?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    connect?: bitacoraWhereUniqueInput | bitacoraWhereUniqueInput[]
+    update?: bitacoraUpdateWithWhereUniqueWithoutUsuarioInput | bitacoraUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: bitacoraUpdateManyWithWhereWithoutUsuarioInput | bitacoraUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: bitacoraScalarWhereInput | bitacoraScalarWhereInput[]
+  }
+
+  export type usuarioCreateNestedOneWithoutBitacoraInput = {
+    create?: XOR<usuarioCreateWithoutBitacoraInput, usuarioUncheckedCreateWithoutBitacoraInput>
+    connectOrCreate?: usuarioCreateOrConnectWithoutBitacoraInput
+    connect?: usuarioWhereUniqueInput
+  }
+
+  export type usuarioUpdateOneWithoutBitacoraNestedInput = {
+    create?: XOR<usuarioCreateWithoutBitacoraInput, usuarioUncheckedCreateWithoutBitacoraInput>
+    connectOrCreate?: usuarioCreateOrConnectWithoutBitacoraInput
+    upsert?: usuarioUpsertWithoutBitacoraInput
+    disconnect?: usuarioWhereInput | boolean
+    delete?: usuarioWhereInput | boolean
+    connect?: usuarioWhereUniqueInput
+    update?: XOR<XOR<usuarioUpdateToOneWithWhereWithoutBitacoraInput, usuarioUpdateWithoutBitacoraInput>, usuarioUncheckedUpdateWithoutBitacoraInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -32070,6 +33569,7 @@ export namespace Prisma {
     contrasena: string
     email?: string | null
     empleado: empleadoCreateNestedOneWithoutUsuarioInput
+    bitacora?: bitacoraCreateNestedManyWithoutUsuarioInput
   }
 
   export type usuarioUncheckedCreateWithoutAdministradorInput = {
@@ -32078,6 +33578,7 @@ export namespace Prisma {
     usuario: string
     contrasena: string
     email?: string | null
+    bitacora?: bitacoraUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type usuarioCreateOrConnectWithoutAdministradorInput = {
@@ -32133,6 +33634,7 @@ export namespace Prisma {
     contrasena?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     empleado?: empleadoUpdateOneRequiredWithoutUsuarioNestedInput
+    bitacora?: bitacoraUpdateManyWithoutUsuarioNestedInput
   }
 
   export type usuarioUncheckedUpdateWithoutAdministradorInput = {
@@ -32141,6 +33643,7 @@ export namespace Prisma {
     usuario?: StringFieldUpdateOperationsInput | string
     contrasena?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    bitacora?: bitacoraUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type orden_trabajoUpsertWithWhereUniqueWithoutAdministradorInput = {
@@ -32830,6 +34333,7 @@ export namespace Prisma {
     contrasena: string
     email?: string | null
     administrador?: administradorCreateNestedOneWithoutUsuarioInput
+    bitacora?: bitacoraCreateNestedManyWithoutUsuarioInput
   }
 
   export type usuarioUncheckedCreateWithoutEmpleadoInput = {
@@ -32838,6 +34342,7 @@ export namespace Prisma {
     contrasena: string
     email?: string | null
     administrador?: administradorUncheckedCreateNestedOneWithoutUsuarioInput
+    bitacora?: bitacoraUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type usuarioCreateOrConnectWithoutEmpleadoInput = {
@@ -32929,6 +34434,7 @@ export namespace Prisma {
     contrasena?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     administrador?: administradorUpdateOneWithoutUsuarioNestedInput
+    bitacora?: bitacoraUpdateManyWithoutUsuarioNestedInput
   }
 
   export type usuarioUncheckedUpdateWithoutEmpleadoInput = {
@@ -32937,6 +34443,7 @@ export namespace Prisma {
     contrasena?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     administrador?: administradorUncheckedUpdateOneWithoutUsuarioNestedInput
+    bitacora?: bitacoraUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type clienteCreateWithoutFacturaInput = {
@@ -34125,6 +35632,30 @@ export namespace Prisma {
     create: XOR<empleadoCreateWithoutUsuarioInput, empleadoUncheckedCreateWithoutUsuarioInput>
   }
 
+  export type bitacoraCreateWithoutUsuarioInput = {
+    id_bitacora?: bigint | number
+    descripcion?: string | null
+    fecha_hora?: Date | string
+    ip_origen?: string | null
+  }
+
+  export type bitacoraUncheckedCreateWithoutUsuarioInput = {
+    id_bitacora?: bigint | number
+    descripcion?: string | null
+    fecha_hora?: Date | string
+    ip_origen?: string | null
+  }
+
+  export type bitacoraCreateOrConnectWithoutUsuarioInput = {
+    where: bitacoraWhereUniqueInput
+    create: XOR<bitacoraCreateWithoutUsuarioInput, bitacoraUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type bitacoraCreateManyUsuarioInputEnvelope = {
+    data: bitacoraCreateManyUsuarioInput | bitacoraCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
   export type administradorUpsertWithoutUsuarioInput = {
     update: XOR<administradorUpdateWithoutUsuarioInput, administradorUncheckedUpdateWithoutUsuarioInput>
     create: XOR<administradorCreateWithoutUsuarioInput, administradorUncheckedCreateWithoutUsuarioInput>
@@ -34176,6 +35707,83 @@ export namespace Prisma {
     diagnostico?: diagnosticoUncheckedUpdateManyWithoutEmpleadoNestedInput
     horario_empleado?: horario_empleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
     orden_trabajo?: orden_trabajoUncheckedUpdateManyWithoutEmpleadoNestedInput
+  }
+
+  export type bitacoraUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: bitacoraWhereUniqueInput
+    update: XOR<bitacoraUpdateWithoutUsuarioInput, bitacoraUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<bitacoraCreateWithoutUsuarioInput, bitacoraUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type bitacoraUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: bitacoraWhereUniqueInput
+    data: XOR<bitacoraUpdateWithoutUsuarioInput, bitacoraUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type bitacoraUpdateManyWithWhereWithoutUsuarioInput = {
+    where: bitacoraScalarWhereInput
+    data: XOR<bitacoraUpdateManyMutationInput, bitacoraUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type bitacoraScalarWhereInput = {
+    AND?: bitacoraScalarWhereInput | bitacoraScalarWhereInput[]
+    OR?: bitacoraScalarWhereInput[]
+    NOT?: bitacoraScalarWhereInput | bitacoraScalarWhereInput[]
+    id_bitacora?: BigIntFilter<"bitacora"> | bigint | number
+    usuario_id?: IntNullableFilter<"bitacora"> | number | null
+    descripcion?: StringNullableFilter<"bitacora"> | string | null
+    fecha_hora?: DateTimeFilter<"bitacora"> | Date | string
+    ip_origen?: StringNullableFilter<"bitacora"> | string | null
+  }
+
+  export type usuarioCreateWithoutBitacoraInput = {
+    usuario: string
+    contrasena: string
+    email?: string | null
+    administrador?: administradorCreateNestedOneWithoutUsuarioInput
+    empleado: empleadoCreateNestedOneWithoutUsuarioInput
+  }
+
+  export type usuarioUncheckedCreateWithoutBitacoraInput = {
+    id?: number
+    empleado_ci: number
+    usuario: string
+    contrasena: string
+    email?: string | null
+    administrador?: administradorUncheckedCreateNestedOneWithoutUsuarioInput
+  }
+
+  export type usuarioCreateOrConnectWithoutBitacoraInput = {
+    where: usuarioWhereUniqueInput
+    create: XOR<usuarioCreateWithoutBitacoraInput, usuarioUncheckedCreateWithoutBitacoraInput>
+  }
+
+  export type usuarioUpsertWithoutBitacoraInput = {
+    update: XOR<usuarioUpdateWithoutBitacoraInput, usuarioUncheckedUpdateWithoutBitacoraInput>
+    create: XOR<usuarioCreateWithoutBitacoraInput, usuarioUncheckedCreateWithoutBitacoraInput>
+    where?: usuarioWhereInput
+  }
+
+  export type usuarioUpdateToOneWithWhereWithoutBitacoraInput = {
+    where?: usuarioWhereInput
+    data: XOR<usuarioUpdateWithoutBitacoraInput, usuarioUncheckedUpdateWithoutBitacoraInput>
+  }
+
+  export type usuarioUpdateWithoutBitacoraInput = {
+    usuario?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    administrador?: administradorUpdateOneWithoutUsuarioNestedInput
+    empleado?: empleadoUpdateOneRequiredWithoutUsuarioNestedInput
+  }
+
+  export type usuarioUncheckedUpdateWithoutBitacoraInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    empleado_ci?: IntFieldUpdateOperationsInput | number
+    usuario?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    administrador?: administradorUncheckedUpdateOneWithoutUsuarioNestedInput
   }
 
   export type orden_trabajoCreateManyAdministradorInput = {
@@ -34697,6 +36305,34 @@ export namespace Prisma {
     estado?: Enumestado_ordenFieldUpdateOperationsInput | $Enums.estado_orden
     empleado_ci?: IntFieldUpdateOperationsInput | number
     administrador_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type bitacoraCreateManyUsuarioInput = {
+    id_bitacora?: bigint | number
+    descripcion?: string | null
+    fecha_hora?: Date | string
+    ip_origen?: string | null
+  }
+
+  export type bitacoraUpdateWithoutUsuarioInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type bitacoraUncheckedUpdateWithoutUsuarioInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type bitacoraUncheckedUpdateManyWithoutUsuarioInput = {
+    id_bitacora?: BigIntFieldUpdateOperationsInput | bigint | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_hora?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip_origen?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 
