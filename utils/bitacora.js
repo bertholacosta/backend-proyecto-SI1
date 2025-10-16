@@ -51,6 +51,32 @@ const bitacora = async ({ req, res, descripcion, usuario_id = null }) => {
     }   
 };
 
+// Función simplificada para registrar bitácora con solo usuario_id, descripción e IP
+const registrarBitacora = async (usuario_id, descripcion, ip) => {
+    try {
+        const newBitacora = await prisma.bitacora.create({
+            data: {
+                usuario_id: usuario_id || null,
+                descripcion,
+                ip_origen: ip || null
+            },
+        });
+        
+        console.log('Bitácora registrada exitosamente:', {
+            id_bitacora: newBitacora.id_bitacora,
+            usuario_id,
+            descripcion,
+            ip_origen: ip,
+            fecha_hora: newBitacora.fecha_hora
+        });
+        return newBitacora;
+    } catch (error) {
+        console.error("Error al registrar bitácora", error);
+        return null;
+    }
+};
+
 module.exports = {
   bitacora,
+  registrarBitacora
 };

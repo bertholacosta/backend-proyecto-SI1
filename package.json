@@ -1,30 +1,25 @@
 {
-  "name": "backend-proyecto-si1",
+  "name": "backend-prueba",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "build": "prisma generate",
-    "postinstall": "prisma generate"
+    "start": "nodemon index",
+    "dev": "node --watch index.js"
   },
-  "keywords": ["api", "backend", "express", "prisma"],
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "Backend API para proyecto SI1",
-  "engines": {
-    "node": ">=18.0.0"
-  },
+  "description": "",
   "dependencies": {
     "@prisma/client": "^6.16.2",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "prisma": "^6.16.2"
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prisma": "^6.16.2"
   }
 }
