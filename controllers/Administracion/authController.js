@@ -116,12 +116,19 @@ const login = async (req, res) => {
     const { contrasena: _, ...userWithoutPassword } = user;
 
     // Configurar cookie
-    res.cookie("access_token", token, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: "Strict",
+      secure: true, // Siempre true para HTTPS en producción
+      sameSite: "None", // Cambiado a None para permitir cross-origin
       maxAge: 8 * 60 * 60 * 1000, // 8 horas
-    });
+      path: '/'
+    };
+    
+    // Debug log
+    console.log('🍪 Configurando cookie con opciones:', cookieOptions);
+    console.log('🌐 Request Origin:', req.headers.origin);
+    
+    res.cookie("access_token", token, cookieOptions);
 
     return res.status(200).json({
       message: "Login exitoso",
@@ -145,8 +152,9 @@ const logout = async (req, res) => {
   try {
     res.clearCookie("access_token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Solo usar secure en producción
-      sameSite: "Strict",
+      secure: true, // Siempre true para HTTPS
+      sameSite: "None", // Igual configuración que al crear la cookie
+      path: '/'
     });
     await bitacora({
       req,
