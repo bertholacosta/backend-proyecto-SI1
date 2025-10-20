@@ -51,6 +51,33 @@ const buildOrderBy = (sortBy, sortOrder) => {
       return { fecha: "desc" };
   }
 };
+// --- Nuevo helper: convierte BigInt a string recursivamente ---
+
+const convertBigIntToString = (value) => {
+  if (value === null || value === undefined) return value;
+
+  // BigInt -> string (más seguro que Number para ids grandes)
+  if (typeof value === "bigint") return value.toString();
+
+  // Date -> ISO string (evita que quede como {})
+  if (value instanceof Date) return value.toISOString();
+
+  // Arrays -> map recursivo
+  if (Array.isArray(value)) return value.map(convertBigIntToString);
+
+  // Objetos planos -> convertir cada campo recursivamente
+  if (typeof value === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) {
+      out[k] = convertBigIntToString(v);
+    }
+    return out;
+  }
+
+  // primitivos (string, number, boolean)
+  return value;
+};
+// --- fin helper ---
 
 // CREATE Diagnóstico con detalles opcionales
 const createDiagnostico = async (req, res) => {
@@ -108,7 +135,7 @@ const createDiagnostico = async (req, res) => {
     const usuario_id = await resolveUsuarioId(req);
     await bitacora({ req, res, descripcion: `Creación de diagnóstico #${diag.nro} para ${placa}`, usuario_id });
 
-    res.status(201).json({ message: "Diagnóstico creado", diagnostico: diag });
+    res.status(201).json({ message: "Diagnóstico creado", diagnostico: convertBigIntToString(diag) });
   } catch (error) {
     console.error("Error creando diagnóstico:", error);
     res.status(400).json({ error: error.message || "Error al crear diagnóstico" });
@@ -144,7 +171,7 @@ const getAllDiagnosticos = async (req, res) => {
 
     res.status(200).json({
       message: "Diagnósticos obtenidos",
-      diagnosticos: items,
+      diagnosticos: items.map(convertBigIntToString),
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(total / limit),
@@ -174,7 +201,7 @@ const getDiagnosticoById = async (req, res) => {
     });
     if (!d) return res.status(404).json({ error: "Diagnóstico no encontrado" });
 
-    res.status(200).json({ message: "Diagnóstico encontrado", diagnostico: d });
+    res.status(200).json({ message: "Diagnóstico encontrado", diagnostico: convertBigIntToString(d) });
   } catch (error) {
     console.error("Error obteniendo diagnóstico:", error);
     res.status(500).json({ error: error.message || "Error al obtener diagnóstico" });
@@ -262,7 +289,7 @@ const updateDiagnostico = async (req, res) => {
     const usuario_id = await resolveUsuarioId(req);
     await bitacora({ req, res, descripcion: `Actualización de diagnóstico #${id}`, usuario_id });
 
-    res.status(200).json({ message: "Diagnóstico actualizado", diagnostico: result });
+    res.status(200).json({ message: "Diagnóstico actualizado", diagnostico: convertBigIntToString(result) });
   } catch (error) {
     console.error("Error actualizando diagnóstico:", error);
     res.status(400).json({ error: error.message || "Error al actualizar diagnóstico" });
@@ -340,7 +367,7 @@ const searchDiagnosticos = async (req, res) => {
 
     res.status(200).json({
       message: `Búsqueda completada. ${total} diagnóstico(s) encontrado(s)`,
-      diagnosticos: items,
+      diagnosticos: items.map(convertBigIntToString),
       pagination: {
         currentPage: pageNum,
         totalPages: Math.ceil(total / limitNum),
@@ -372,7 +399,7 @@ const addDetalle = async (req, res) => {
       }
     });
 
-    res.status(201).json({ message: "Detalle agregado", detalle: nuevo });
+    res.status(201).json({ message: "Detalle agregado", detalle: convertBigIntToString(nuevo) });
   } catch (error) {
     console.error("Error agregando detalle:", error);
     res.status(400).json({ error: error.message || "Error al agregar detalle" });

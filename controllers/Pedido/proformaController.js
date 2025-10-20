@@ -34,6 +34,33 @@ async function calcularTotal(proformaId) {
   });
   return total;
 }
+// --- Nuevo helper: convierte BigInt a string recursivamente ---
+
+const convertBigIntToString = (value) => {
+  if (value === null || value === undefined) return value;
+
+  // BigInt -> string (más seguro que Number para ids grandes)
+  if (typeof value === "bigint") return value.toString();
+
+  // Date -> ISO string (evita que quede como {})
+  if (value instanceof Date) return value.toISOString();
+
+  // Arrays -> map recursivo
+  if (Array.isArray(value)) return value.map(convertBigIntToString);
+
+  // Objetos planos -> convertir cada campo recursivamente
+  if (typeof value === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) {
+      out[k] = convertBigIntToString(v);
+    }
+    return out;
+  }
+
+  // primitivos (string, number, boolean)
+  return value;
+};
+// --- fin helper ---
 
 // Crear proforma con detalles
 const createProforma = async (req, res) => {
@@ -91,8 +118,9 @@ const createProforma = async (req, res) => {
     const total = await calcularTotal(created.id);
 
     await bitacora({ req, res, descripcion: `Creación de proforma #${created.id} para cliente ${cliente_ci}` });
-
-    return res.status(201).json({ message: 'Proforma creada', proforma: { ...created, id: created.id.toString(), total } });
+ const safeCreated = convertBigIntToString(created);
+   safeCreated.total = total;
+    return res.status(201).json({ message: 'Proforma creada', proforma: safeCreated });
   } catch (error) {
     console.error('Error creando proforma:', error);
     return res.status(400).json({ error: error.message || 'Error creando proforma' });
@@ -116,7 +144,7 @@ const getAllProformas = async (req, res) => {
       })
     ]);
 
-    const rows = rowsRaw.map(p => ({ ...p, id: p.id.toString() }));
+    const rows = rowsRaw.map(convertBigIntToString);
     return res.json({ data: rows, pagination: { page, pageSize, total, totalPages: Math.ceil(total / pageSize) } });
   } catch (error) {
     console.error('Error listando proformas:', error);
@@ -167,7 +195,7 @@ const searchProformas = async (req, res) => {
         take: sizeN
       })
     ]);
-    const rows = rowsRaw.map(p => ({ ...p, id: p.id.toString() }));
+    const rows = rowsRaw.map(convertBigIntToString);
     return res.json({ data: rows, pagination: { page: pageN, pageSize: sizeN, total, totalPages: Math.ceil(total / sizeN) } });
   } catch (error) {
     console.error('Error buscando proformas:', error);
@@ -183,7 +211,7 @@ const getProformaById = async (req, res) => {
       include: { cliente: true, diagnostico: true, detalle_proforma: true }
     });
     if (!p) return res.status(404).json({ error: 'Proforma no encontrada' });
-    return res.json({ ...p, id: p.id.toString() });
+    return res.json(convertBigIntToString(p));
   } catch (error) {
     console.error('Error obteniendo proforma:', error);
     return res.status(500).json({ error: 'Error interno del servidor' });
@@ -238,7 +266,9 @@ const updateProforma = async (req, res) => {
 
     const total = await calcularTotal(id);
     await bitacora({ req, res, descripcion: `Actualización de proforma #${id}` });
-    return res.json({ message: 'Proforma actualizada', proforma: { ...updated, id: updated.id.toString(), total } });
+    const safeUpdated = convertBigIntToString(updated);
+    safeUpdated.total = total;
+    return res.json({ message: 'Proforma actualizada', proforma: safeUpdated });
   } catch (error) {
     console.error('Error actualizando proforma:', error);
     if (error.code === 'P2025') return res.status(404).json({ error: 'Proforma no encontrada' });
@@ -251,7 +281,7 @@ const deleteProforma = async (req, res) => {
     const { id } = req.params;
     const deleted = await prisma.proforma.delete({ where: { id: BigInt(id) } });
     await bitacora({ req, res, descripcion: `Eliminación de proforma #${id}` });
-    return res.json({ message: 'Proforma eliminada', proforma: { ...deleted, id: deleted.id.toString() } });
+     return res.json({ message: 'Proforma eliminada', proforma: convertBigIntToString(deleted) });
   } catch (error) {
     console.error('Error eliminando proforma:', error);
     if (error.code === 'P2025') return res.status(404).json({ error: 'Proforma no encontrada' });
@@ -278,7 +308,7 @@ const addDetalle = async (req, res) => {
     });
     const total = await calcularTotal(id);
     await bitacora({ req, res, descripcion: `Alta de detalle en proforma #${id}` });
-    return res.status(201).json({ message: 'Detalle agregado', detalle: det, total });
+    return res.status(201).json({ message: 'Detalle agregado', detalle: convertBigIntToString(det), total });
   } catch (error) {
     console.error('Error agregando detalle:', error);
     return res.status(400).json({ error: error.message || 'Error agregando detalle' });
