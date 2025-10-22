@@ -5,8 +5,6 @@ const Validaciones = require("../../utils/validaciones");
 const jwt = require("jsonwebtoken");
 const bitacora = require("../../utils/bitacora").bitacora;
 const UserBlockingService = require("../../services/userBlockingService");
-const emailService = require("../../services/emailService");
-const { generarContrasena } = require("../../utils/passwordGenerator");
 
 // Login usuario
 
@@ -117,25 +115,18 @@ const login = async (req, res) => {
 
     const { contrasena: _, ...userWithoutPassword } = user;
 
-    // Determinar si estamos en producción basado en el origen
-    const origin = req.headers.origin || '';
-    const isProduction = origin.includes('vercel.app') || origin.includes('https://');
-    const isDevelopment = origin.includes('localhost') || origin.includes('127.0.0.1');
-
-    // Configurar cookie con opciones adaptadas al entorno
+    // Configurar cookie
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction, // true solo en HTTPS (producción)
-      sameSite: isProduction ? "None" : "Lax", // "None" en producción cross-site, "Lax" en desarrollo
+      secure: true, // Siempre true para HTTPS en producción
+      sameSite: "None", // Cambiado a None para permitir cross-origin
       maxAge: 8 * 60 * 60 * 1000, // 8 horas
-      path: '/',
-      ...(isProduction && { domain: undefined }) // No establecer domain en producción para mayor compatibilidad
+      path: '/'
     };
     
     // Debug log
     console.log('🍪 Configurando cookie con opciones:', cookieOptions);
-    console.log('🌐 Request Origin:', origin);
-    console.log('🏭 Entorno:', isProduction ? 'Producción' : 'Desarrollo');
+    console.log('🌐 Request Origin:', req.headers.origin);
     
     res.cookie("access_token", token, cookieOptions);
 
@@ -159,14 +150,10 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    // Determinar entorno
-    const origin = req.headers.origin || '';
-    const isProduction = origin.includes('vercel.app') || origin.includes('https://');
-    
     res.clearCookie("access_token", {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "None" : "Lax",
+      secure: true, // Siempre true para HTTPS
+      sameSite: "None", // Igual configuración que al crear la cookie
       path: '/'
     });
     await bitacora({
@@ -396,167 +383,6 @@ const historialBloqueos = async (req, res) => {
   }
 };
 
-// Recuperar contraseña
-const recuperarContrasena = async (req, res) => {
-  const { usuario: nombreUsuario, email } = req.body;
-
-  try {
-    // Validaciones básicas
-    if (!nombreUsuario || !email) {
-      return res.status(400).json({ 
-        error: "Datos incompletos",
-        message: "Por favor proporciona el usuario y el correo electrónico." 
-      });
-    }
-
-    // Validar formato del usuario
-    try {
-      Validaciones.usuario(nombreUsuario);
-    } catch (error) {
-      return res.status(400).json({ 
-        error: "Usuario inválido",
-        message: error.message 
-      });
-    }
-
-    // Validar formato del email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ 
-        error: "Email inválido",
-        message: "Por favor proporciona un correo electrónico válido." 
-      });
-    }
-
-    // Buscar primero si el usuario existe
-    const usuarioExiste = await prisma.usuario.findUnique({
-      where: { usuario: nombreUsuario }
-    });
-
-    // Si el usuario no existe
-    if (!usuarioExiste) {
-      // Registrar intento fallido
-      await prisma.bitacora.create({
-        data: {
-          usuario_id: null,
-          descripcion: `Intento de recuperación con usuario inexistente: ${nombreUsuario}`,
-          ip_origen: req.ip || 'IP no disponible'
-        }
-      });
-
-      return res.status(404).json({ 
-        error: "Usuario no encontrado",
-        message: "El usuario ingresado no existe en el sistema."
-      });
-    }
-
-    // Si el usuario existe pero el email no coincide
-    if (usuarioExiste.email !== email) {
-      // Registrar intento fallido
-      await prisma.bitacora.create({
-        data: {
-          usuario_id: usuarioExiste.id,
-          descripcion: `Intento de recuperación con email incorrecto para usuario: ${nombreUsuario}`,
-          ip_origen: req.ip || 'IP no disponible'
-        }
-      });
-
-      return res.status(400).json({ 
-        error: "Correo incorrecto",
-        message: "El correo electrónico no coincide con el usuario ingresado."
-      });
-    }
-
-    // Ahora obtenemos el usuario completo con la relación
-    const user = await prisma.usuario.findUnique({
-      where: { usuario: nombreUsuario },
-      include: {
-        empleado: true
-      }
-    });
-
-    // Verificar si el usuario está bloqueado
-    const estaBloqueado = await UserBlockingService.verificarBloqueo(user.id);
-    
-    if (estaBloqueado) {
-      const infoBloqueo = await UserBlockingService.obtenerInformacionBloqueo(user.id);
-      
-      await prisma.bitacora.create({
-        data: {
-          usuario_id: user.id,
-          descripcion: `Intento de recuperación de contraseña en usuario bloqueado: ${nombreUsuario}`,
-          ip_origen: req.ip || 'IP no disponible'
-        }
-      });
-
-      return res.status(423).json({ 
-        error: "Usuario bloqueado",
-        message: `Tu cuenta está bloqueada. Intenta nuevamente en ${infoBloqueo.tiempoRestanteHoras}h ${infoBloqueo.tiempoRestanteMinutos}m o contacta al administrador.`,
-        bloqueado: true
-      });
-    }
-
-    // Generar nueva contraseña
-    const nuevaContrasena = generarContrasena(12);
-    
-    // Hash de la nueva contraseña
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(nuevaContrasena, salt);
-
-    // Actualizar la contraseña en la base de datos
-    await prisma.usuario.update({
-      where: { id: user.id },
-      data: { contrasena: hashedPassword }
-    });
-
-    // Enviar correo con la nueva contraseña
-    try {
-      await emailService.enviarNuevaContrasena(email, nombreUsuario, nuevaContrasena);
-      
-      // Registrar recuperación exitosa en bitácora
-      await prisma.bitacora.create({
-        data: {
-          usuario_id: user.id,
-          descripcion: `Recuperación de contraseña exitosa para el usuario ${nombreUsuario}. Nueva contraseña enviada al correo ${email}`,
-          ip_origen: req.ip || 'IP no disponible'
-        }
-      });
-
-      return res.status(200).json({ 
-        message: "Se ha enviado una nueva contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada.",
-        success: true
-      });
-
-    } catch (emailError) {
-      console.error('Error al enviar correo:', emailError);
-      
-      // Revertir el cambio de contraseña si el correo no se pudo enviar
-      // (opcional, depende de tu lógica de negocio)
-      
-      await prisma.bitacora.create({
-        data: {
-          usuario_id: user.id,
-          descripcion: `Error al enviar correo de recuperación para ${nombreUsuario}: ${emailError.message}`,
-          ip_origen: req.ip || 'IP no disponible'
-        }
-      });
-
-      return res.status(500).json({ 
-        error: "Error al enviar correo",
-        message: "No se pudo enviar el correo con la nueva contraseña. Por favor contacta al administrador o intenta más tarde."
-      });
-    }
-
-  } catch (error) {
-    console.error("Error al recuperar contraseña:", error);
-    
-    return res.status(500).json({
-      error: "Error interno del servidor",
-      message: "Ocurrió un error al procesar tu solicitud. Por favor intenta más tarde.",
-    });
-  }
-};
-
 module.exports = { 
   login, 
   logout, 
@@ -564,6 +390,5 @@ module.exports = {
   desbloquearUsuario, 
   estadoBloqueoUsuario, 
   usuariosBloqueados, 
-  historialBloqueos,
-  recuperarContrasena
+  historialBloqueos 
 };
