@@ -6,6 +6,7 @@ const authController = require("../../controllers/Administracion/authController"
 router.post("/login", authController.login); 
 router.post("/logout", authMiddleware, authController.logout);
 router.get("/verificar", authMiddleware, authController.verificarSesion);
+router.post("/recuperar-contrasena", authController.recuperarContrasena);
 
 // Rutas de gestión de bloqueos
 router.post("/desbloquear/:usuario_id", authMiddleware, authController.desbloquearUsuario);
