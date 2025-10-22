@@ -1,20 +1,35 @@
 const nodemailer = require('nodemailer');
 
-// Configuración del transportador de correo
-// Puedes configurar diferentes servicios de email aquí
+// Configuración del transportador de correo con soporte para múltiples puertos
+// Render y otros servicios de hosting suelen bloquear el puerto 587
 const createTransporter = () => {
-  return nodemailer.createTransport({
+  const useSSL = process.env.EMAIL_PORT === '465' || process.env.EMAIL_USE_SSL === 'true';
+  const port = parseInt(process.env.EMAIL_PORT || (useSSL ? '465' : '587'));
+  
+  const config = {
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: process.env.EMAIL_PORT || 587,
-    secure: false, // true para 465, false para otros puertos
+    port: port,
+    secure: useSSL, // true para puerto 465 (SSL), false para 587 (TLS)
     auth: {
-      user: process.env.EMAIL_USER, // Tu correo electrónico
-      pass: process.env.EMAIL_PASSWORD // Tu contraseña o contraseña de aplicación
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
     },
+    // Configuración robusta para entornos de producción
     tls: {
-      rejectUnauthorized: false
-    }
-  });
+      rejectUnauthorized: false,
+      minVersion: 'TLSv1.2'
+    },
+    connectionTimeout: 10000, // 10 segundos
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
+    // Importante para servicios de hosting
+    requireTLS: !useSSL,
+    debug: process.env.NODE_ENV === 'development',
+    logger: process.env.NODE_ENV === 'development'
+  };
+
+  console.log(`📧 Configurando email: ${config.host}:${config.port} (SSL: ${config.secure})`);
+  return nodemailer.createTransport(config);
 };
 
 /**
