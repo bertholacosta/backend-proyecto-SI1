@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/database.js';
+import BitacoraService from '../services/bitacora.service.js';
 
 // Login de usuario
 export const login = async (req, res) => {
@@ -44,6 +45,10 @@ export const login = async (req, res) => {
         error: 'Credenciales inválidas' 
       });
     }
+
+    // Registrar en bitácora
+    const ipOrigen = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    await BitacoraService.registrarLogin(usuario.id, usuario.username, ipOrigen);
 
     // Generar token JWT
     const token = jwt.sign(
@@ -150,6 +155,26 @@ export const register = async (req, res) => {
     console.error('Error en registro:', error);
     res.status(500).json({ 
       error: 'Error al registrar usuario',
+      details: error.message 
+    });
+  }
+};
+
+// Logout de usuario
+export const logout = async (req, res) => {
+  try {
+    const ipOrigen = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    
+    // Registrar en bitácora
+    await BitacoraService.registrarLogout(req.user.id, req.user.username, ipOrigen);
+
+    res.json({
+      message: 'Sesión cerrada exitosamente'
+    });
+  } catch (error) {
+    console.error('Error en logout:', error);
+    res.status(500).json({ 
+      error: 'Error al cerrar sesión',
       details: error.message 
     });
   }

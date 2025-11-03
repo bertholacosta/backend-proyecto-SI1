@@ -86,6 +86,15 @@ export const createDiagnostico = async (req, res) => {
       });
     }
 
+    // LÓGICA DE PERMISOS: Si es empleado, solo puede crear diagnósticos para sí mismo
+    if (req.userRole === 'Empleado') {
+      if (empleadoCi !== req.empleadoCi) {
+        return res.status(403).json({ 
+          error: 'Los empleados solo pueden crear diagnósticos para sí mismos' 
+        });
+      }
+    }
+
     if (!detalles || !Array.isArray(detalles) || detalles.length === 0) {
       return res.status(400).json({ 
         error: 'Debe proporcionar al menos un detalle del diagnóstico' 

@@ -8,6 +8,18 @@ import authRoutes from './routes/auth.routes.js';
 import empleadoRoutes from './routes/empleado.routes.js';
 import motoRoutes from './routes/moto.routes.js';
 import diagnosticoRoutes from './routes/diagnostico.routes.js';
+import clienteRoutes from './routes/cliente.routes.js';
+import servicioRoutes from './routes/servicio.routes.js';
+import categoriaRoutes from './routes/categoria.routes.js';
+import proformaRoutes from './routes/proforma.routes.js';
+import horarioRoutes from './routes/horario.routes.js';
+import ordenTrabajoRoutes from './routes/ordenTrabajo.routes.js';
+import comisionRoutes from './routes/comision.routes.js';
+import marcaHerramientaRoutes from './routes/marcaHerramienta.routes.js';
+import herramientaRoutes from './routes/herramienta.routes.js';
+import movimientoHerramientaRoutes from './routes/movimientoHerramienta.routes.js';
+import bitacoraRoutes from './routes/bitacora.routes.js';
+import meRoutes from './routes/me.routes.js';
 
 dotenv.config();
 
@@ -27,6 +39,18 @@ app.use('/api/permisos', permisoRoutes);
 app.use('/api/empleados', empleadoRoutes);
 app.use('/api/motos', motoRoutes);
 app.use('/api/diagnosticos', diagnosticoRoutes);
+app.use('/api/clientes', clienteRoutes);
+app.use('/api/servicios', servicioRoutes);
+app.use('/api/categorias', categoriaRoutes);
+app.use('/api/proformas', proformaRoutes);
+app.use('/api/horarios', horarioRoutes);
+app.use('/api/ordenes-trabajo', ordenTrabajoRoutes);
+app.use('/api/comisiones', comisionRoutes);
+app.use('/api/marcas-herramienta', marcaHerramientaRoutes);
+app.use('/api/herramientas', herramientaRoutes);
+app.use('/api/movimientos-herramienta', movimientoHerramientaRoutes);
+app.use('/api/bitacora', bitacoraRoutes);
+app.use('/api/me', meRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
