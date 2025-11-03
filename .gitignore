@@ -1,64 +1,10 @@
-# --- Logs y diagnósticos ---
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-# --- Datos de runtime / procesos ---
-pids/
-*.pid
-*.seed
-*.pid.lock
-# --- Cobertura / pruebas ---
-coverage/
-.nyc_output/
-# --- Caches de herramientas ---
-.cache/
-.parcel-cache/
-.babelcache/
-.eslintcache
-.turbo/
-.next/
-.svelte-kit/
-.nuxt/
-# --- Salidas de build ---
-dist/
-build/
-out/
-# TypeScript incremental
-*.tsbuildinfo
-tsconfig.tsbuildinfo
-# --- Dependencias ---
+# Dependencies
 node_modules/
-# --- Entornos (mantén un .env.example en el repo) ---
+
+# Environment variables
 .env
-.env.*
-!.env.example
-# --- DB locales / archivos temporales (por si usas SQLite en dev) ---
-*.db
-*.db-journal
-*.sqlite
-*.sqlite-journal
-dev.db
-# --- Prisma ---
-prisma/client/
-prisma/generated/
-prisma/dev.db
-prisma/dev.db-journal
-# --- PM2 / procesos ---
-.pm2/
-# --- Archivos de empaquetado accidental ---
-*.tgz
-# --- SO / IDE ---
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-*.swp
-# --- Docker ---
-docker-data/
+.env.local
+.env.*.local
 
 # Logs
 logs
@@ -66,21 +12,17 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# OS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Prisma
+prisma/migrations/
