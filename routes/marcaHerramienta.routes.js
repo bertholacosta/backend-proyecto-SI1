@@ -7,6 +7,7 @@ import {
   deleteMarcaHerramienta
 } from '../controllers/marcaHerramienta.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { registrarAccion } from '../middleware/bitacora.middleware.js';
 
 const router = express.Router();
 
@@ -16,8 +17,8 @@ router.use(authenticate);
 // Rutas para marcas de herramientas
 router.get('/', getAllMarcasHerramienta);
 router.get('/:id', getMarcaHerramientaById);
-router.post('/', createMarcaHerramienta);
-router.put('/:id', updateMarcaHerramienta);
-router.delete('/:id', deleteMarcaHerramienta);
+router.post('/', registrarAccion('Marca de Herramienta', 'crear'), createMarcaHerramienta);
+router.put('/:id', registrarAccion('Marca de Herramienta', 'editar'), updateMarcaHerramienta);
+router.delete('/:id', registrarAccion('Marca de Herramienta', 'eliminar'), deleteMarcaHerramienta);
 
 export default router;

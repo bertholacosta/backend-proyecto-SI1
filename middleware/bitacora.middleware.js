@@ -76,11 +76,25 @@ export const registrarAccion = (modulo, accion) => {
             break;
             
           case 'asignar':
-            descripcion = `Asignó permisos en ${modulo}`;
+            descripcion = `Asignó ${modulo}`;
+            if (req.body) {
+              descripcion += `: ${JSON.stringify(req.body)}`;
+            }
+            break;
+
+          case 'eliminar asignación':
+            descripcion = `Eliminó asignación de ${modulo}`;
             break;
 
           case 'cambiar estado':
             descripcion = `Cambió estado de ${modulo}`;
+            if (req.body?.estado) {
+              descripcion += ` a: ${req.body.estado}`;
+            }
+            break;
+
+          case 'marcar como pagada':
+            descripcion = `Marcó como pagada ${modulo}`;
             break;
             
           default:

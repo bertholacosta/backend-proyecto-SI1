@@ -8,6 +8,7 @@ import {
   deleteHerramienta
 } from '../controllers/herramienta.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { registrarAccion } from '../middleware/bitacora.middleware.js';
 
 const router = express.Router();
 
@@ -18,8 +19,8 @@ router.use(authenticate);
 router.get('/', getAllHerramientas);
 router.get('/marca/:marcaId', getHerramientasByMarca);
 router.get('/:id', getHerramientaById);
-router.post('/', createHerramienta);
-router.put('/:id', updateHerramienta);
-router.delete('/:id', deleteHerramienta);
+router.post('/', registrarAccion('Herramienta', 'crear'), createHerramienta);
+router.put('/:id', registrarAccion('Herramienta', 'editar'), updateHerramienta);
+router.delete('/:id', registrarAccion('Herramienta', 'eliminar'), deleteHerramienta);
 
 export default router;
