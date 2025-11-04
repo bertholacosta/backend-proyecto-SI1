@@ -36,9 +36,14 @@ export const getAllProformas = async (req, res) => {
       }
     });
 
+    // Convertir cualquier BigInt anidado a string antes de enviar JSON
+    const proformasJSON = JSON.parse(JSON.stringify(proformas, (key, value) =>
+      typeof value === 'bigint' ? value.toString() : value
+    ));
+
     res.json({
-      proformas,
-      total: proformas.length
+      proformas: proformasJSON,
+      total: proformasJSON.length
     });
   } catch (error) {
     console.error('Error al obtener proformas:', error);
@@ -170,11 +175,12 @@ export const createProforma = async (req, res) => {
       total += subtotal;
 
       return {
-        servicioId: detalle.servicioId ? parseInt(detalle.servicioId) : null,
+        servicio: detalle.servicioId ? {
+         connect: { id: parseInt(detalle.servicioId) }
+        } : undefined,
         descripcion: detalle.descripcion,
         cantidad: cantidad,
-        precioUnit: precioUnit,
-        subtotal: subtotal
+        precioUnit: precioUnit
       };
     });
 

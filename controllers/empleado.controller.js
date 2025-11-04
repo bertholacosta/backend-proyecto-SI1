@@ -80,10 +80,10 @@ export const getEmpleadoById = async (req, res) => {
 // Crear empleado
 export const createEmpleado = async (req, res) => {
   try {
-    const { ci, idUsuario, nombre, apellidos, direccion, fechaNac, telefono } = req.body;
+    const { ci, idUsuario, nombre, apellidos, direccion, telefono } = req.body;
 
     // Validaciones
-    if (!ci || !nombre || !apellidos || !direccion || !fechaNac || !telefono) {
+    if (!ci || !nombre || !apellidos || !direccion || !telefono) {
       return res.status(400).json({ 
         error: 'Todos los campos son requeridos excepto ID_USUARIO' 
       });
@@ -91,7 +91,10 @@ export const createEmpleado = async (req, res) => {
 
     // Validar que el CI no exista
     const empleadoExistente = await prisma.empleado.findUnique({
-      where: { ci: parseInt(ci) }
+      where: { ci: parseInt(ci) },
+      include: {
+        usuario: true
+      }
     });
 
     if (empleadoExistente) {
@@ -123,11 +126,9 @@ export const createEmpleado = async (req, res) => {
     const nuevoEmpleado = await prisma.empleado.create({
       data: {
         ci: parseInt(ci),
-        idUsuario: idUsuario ? parseInt(idUsuario) : null,
         nombre,
         apellidos,
         direccion,
-        fechaNac: new Date(fechaNac),
         telefono
       },
       include: {
@@ -140,6 +141,14 @@ export const createEmpleado = async (req, res) => {
         }
       }
     });
+
+    // Si se proporcionó un usuario, actualizar la referencia
+    if (idUsuario) {
+      await prisma.usuario.update({
+        where: { id: parseInt(idUsuario) },
+        data: { empleadoCi: nuevoEmpleado.ci }
+      });
+    }
 
     res.status(201).json({
       message: 'Empleado creado exitosamente',
@@ -158,11 +167,14 @@ export const createEmpleado = async (req, res) => {
 export const updateEmpleado = async (req, res) => {
   try {
     const { ci } = req.params;
-    const { idUsuario, nombre, apellidos, direccion, fechaNac, telefono } = req.body;
+    const { idUsuario, nombre, apellidos, direccion, telefono } = req.body;
 
     // Validar que el empleado exista
     const empleadoExistente = await prisma.empleado.findUnique({
-      where: { ci: parseInt(ci) }
+      where: { ci: parseInt(ci) },
+      include: {
+        usuario: true
+      }
     });
 
     if (!empleadoExistente) {
@@ -172,7 +184,7 @@ export const updateEmpleado = async (req, res) => {
     }
 
     // Si se proporciona un usuario diferente, validar
-    if (idUsuario && idUsuario !== empleadoExistente.idUsuario) {
+    if (idUsuario) {
       const usuario = await prisma.usuario.findUnique({
         where: { id: parseInt(idUsuario) },
         include: { empleado: true }
@@ -191,14 +203,13 @@ export const updateEmpleado = async (req, res) => {
       }
     }
 
+    // Primero actualizamos el empleado
     const empleadoActualizado = await prisma.empleado.update({
       where: { ci: parseInt(ci) },
       data: {
-        idUsuario: idUsuario !== undefined ? (idUsuario ? parseInt(idUsuario) : null) : empleadoExistente.idUsuario,
         nombre: nombre || empleadoExistente.nombre,
         apellidos: apellidos || empleadoExistente.apellidos,
         direccion: direccion || empleadoExistente.direccion,
-        fechaNac: fechaNac ? new Date(fechaNac) : empleadoExistente.fechaNac,
         telefono: telefono || empleadoExistente.telefono
       },
       include: {
@@ -212,10 +223,45 @@ export const updateEmpleado = async (req, res) => {
       }
     });
 
-    res.json({
-      message: 'Empleado actualizado exitosamente',
-      empleado: empleadoActualizado
-    });
+    // Si hay un usuario actual, desvincularlo
+    if (empleadoExistente.usuario) {
+      await prisma.usuario.update({
+        where: { id: empleadoExistente.usuario.id },
+        data: { empleadoCi: null }
+      });
+    }
+
+    // Si se proporcionó un nuevo usuario, vincularlo
+    if (idUsuario) {
+      await prisma.usuario.update({
+        where: { id: parseInt(idUsuario) },
+        data: { empleadoCi: parseInt(ci) }
+      });
+
+      // Refrescar los datos del empleado para incluir el nuevo usuario
+      const empleadoFinal = await prisma.empleado.findUnique({
+        where: { ci: parseInt(ci) },
+        include: {
+          usuario: {
+            select: {
+              id: true,
+              username: true,
+              email: true
+            }
+          }
+        }
+      });
+
+      res.json({
+        message: 'Empleado actualizado exitosamente',
+        empleado: empleadoFinal
+      });
+    } else {
+      res.json({
+        message: 'Empleado actualizado exitosamente',
+        empleado: empleadoActualizado
+      });
+    }
   } catch (error) {
     console.error('Error al actualizar empleado:', error);
     res.status(500).json({ 

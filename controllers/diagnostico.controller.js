@@ -23,9 +23,14 @@ export const getAllDiagnosticos = async (req, res) => {
       ]
     });
 
+    // Convertir BigInt anidados a string antes de enviar JSON (maneja todos los casos)
+    const diagnosticosJSON = JSON.parse(JSON.stringify(diagnosticos, (key, value) =>
+      typeof value === 'bigint' ? value.toString() : value
+    ));
+
     res.json({
-      diagnosticos,
-      total: diagnosticos.length
+      diagnosticos: diagnosticosJSON,
+      total: diagnosticosJSON.length
     });
   } catch (error) {
     console.error('Error al obtener diagnósticos:', error);
