@@ -26,10 +26,26 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configurar Express para confiar en proxies (importante para obtener IP real)
+app.set('trust proxy', true);
+
 // Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware para logging de IP (debug)
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('📍 IP Debug:', {
+      'x-real-ip': req.headers['x-real-ip'],
+      'x-forwarded-for': req.headers['x-forwarded-for'],
+      'req.ip': req.ip,
+      'remoteAddress': req.socket?.remoteAddress
+    });
+  }
+  next();
+});
 
 // Routes
 app.use('/api/auth', authRoutes);

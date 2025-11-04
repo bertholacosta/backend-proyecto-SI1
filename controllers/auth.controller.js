@@ -3,6 +3,27 @@ import jwt from 'jsonwebtoken';
 import prisma from '../config/database.js';
 import BitacoraService from '../services/bitacora.service.js';
 
+/**
+ * Función para normalizar la IP y obtener la IP real del cliente
+ */
+const normalizarIP = (req) => {
+  let ip = 
+    req.headers['x-real-ip'] ||
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+    req.ip ||
+    req.connection?.remoteAddress ||
+    req.socket?.remoteAddress ||
+    'IP desconocida';
+  
+  if (ip.includes('::ffff:')) {
+    ip = ip.replace('::ffff:', '');
+  }
+  if (ip === '::1') {
+    ip = '127.0.0.1';
+  }
+  return ip;
+};
+
 // Login de usuario
 export const login = async (req, res) => {
   try {
@@ -47,7 +68,7 @@ export const login = async (req, res) => {
     }
 
     // Registrar en bitácora
-    const ipOrigen = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const ipOrigen = normalizarIP(req);
     await BitacoraService.registrarLogin(usuario.id, usuario.username, ipOrigen);
 
     // Generar token JWT

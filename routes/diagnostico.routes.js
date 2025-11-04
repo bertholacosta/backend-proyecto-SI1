@@ -1,6 +1,7 @@
 import express from 'express';
 import * as diagnosticoController from '../controllers/diagnostico.controller.js';
 import { authenticate, checkPermission } from '../middleware/permission.middleware.js';
+import { registrarAccion } from '../middleware/bitacora.middleware.js';
 
 const router = express.Router();
 
@@ -11,12 +12,12 @@ router.get('/', authenticate, checkPermission('diagnosticos:ver'), diagnosticoCo
 router.get('/:nro', authenticate, checkPermission('diagnosticos:ver'), diagnosticoController.getDiagnosticoById);
 
 // POST /api/diagnosticos - Crear un nuevo diagnóstico con detalles
-router.post('/', authenticate, checkPermission('diagnosticos:crear'), diagnosticoController.createDiagnostico);
+router.post('/', authenticate, checkPermission('diagnosticos:crear'), registrarAccion('Diagnóstico', 'crear'), diagnosticoController.createDiagnostico);
 
 // PUT /api/diagnosticos/:nro - Actualizar un diagnóstico con detalles
-router.put('/:nro', authenticate, checkPermission('diagnosticos:editar'), diagnosticoController.updateDiagnostico);
+router.put('/:nro', authenticate, checkPermission('diagnosticos:editar'), registrarAccion('Diagnóstico', 'editar'), diagnosticoController.updateDiagnostico);
 
 // DELETE /api/diagnosticos/:nro - Eliminar un diagnóstico
-router.delete('/:nro', authenticate, checkPermission('diagnosticos:eliminar'), diagnosticoController.deleteDiagnostico);
+router.delete('/:nro', authenticate, checkPermission('diagnosticos:eliminar'), registrarAccion('Diagnóstico', 'eliminar'), diagnosticoController.deleteDiagnostico);
 
 export default router;

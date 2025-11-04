@@ -1,6 +1,32 @@
 import BitacoraService from '../services/bitacora.service.js';
 
 /**
+ * Función para limpiar y normalizar la IP, obteniendo la IP real del cliente
+ */
+const normalizarIP = (req) => {
+  // Intentar obtener la IP real en orden de prioridad
+  let ip = 
+    req.headers['x-real-ip'] || // Nginx
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() || // Proxy (primera IP de la lista)
+    req.ip || // Express con trust proxy
+    req.connection?.remoteAddress || // Fallback
+    req.socket?.remoteAddress || // Fallback
+    'IP desconocida';
+  
+  // Remover el prefijo IPv6 ::ffff: si existe
+  if (ip.includes('::ffff:')) {
+    ip = ip.replace('::ffff:', '');
+  }
+  
+  // Si es localhost IPv6, convertir a IPv4
+  if (ip === '::1') {
+    ip = '127.0.0.1';
+  }
+  
+  return ip;
+};
+
+/**
  * Middleware para registrar automáticamente acciones en la bitácora
  */
 export const registrarAccion = (modulo, accion) => {
@@ -9,8 +35,8 @@ export const registrarAccion = (modulo, accion) => {
     const originalSend = res.send;
     const originalJson = res.json;
 
-    // Obtener IP
-    const ipOrigen = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    // Obtener IP real del cliente
+    const ipOrigen = normalizarIP(req);
 
     // Interceptar la respuesta
     const interceptResponse = function(data) {
@@ -75,7 +101,7 @@ export const registrarAccion = (modulo, accion) => {
 export const registrar = async (req, descripcion) => {
   if (!req.user) return;
   
-  const ipOrigen = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const ipOrigen = normalizarIP(req);
   
   await BitacoraService.registrar({
     usuarioId: req.user.id,
