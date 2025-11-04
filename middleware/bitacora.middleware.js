@@ -31,15 +31,21 @@ const normalizarIP = (req) => {
  */
 export const registrarAccion = (modulo, accion) => {
   return async (req, res, next) => {
-    // Guardar el método send original
-    const originalSend = res.send;
-    const originalJson = res.json;
+    // Guardar los métodos originales
+    const originalSend = res.send.bind(res);
+    const originalJson = res.json.bind(res);
 
     // Obtener IP real del cliente
     const ipOrigen = normalizarIP(req);
 
-    // Interceptar la respuesta
-    const interceptResponse = function(data) {
+    // Variable para evitar doble registro
+    let yaRegistrado = false;
+
+    // Función para registrar en bitácora
+    const registrarEnBitacora = () => {
+      if (yaRegistrado) return;
+      yaRegistrado = true;
+
       // Solo registrar si fue exitoso (status 200-299)
       if (res.statusCode >= 200 && res.statusCode < 300 && req.user) {
         let descripcion = '';
@@ -69,6 +75,14 @@ export const registrarAccion = (modulo, accion) => {
             descripcion = `Eliminó ${modulo} [ID: ${idEliminar}]`;
             break;
             
+          case 'asignar':
+            descripcion = `Asignó permisos en ${modulo}`;
+            break;
+
+          case 'cambiar estado':
+            descripcion = `Cambió estado de ${modulo}`;
+            break;
+            
           default:
             descripcion = `Acción en ${modulo}: ${accion}`;
         }
@@ -82,14 +96,19 @@ export const registrarAccion = (modulo, accion) => {
           console.error('Error al registrar en bitácora:', err);
         });
       }
-
-      // Llamar al método original
-      return originalSend.call(this, data);
     };
 
-    // Reemplazar ambos métodos
-    res.send = interceptResponse;
-    res.json = interceptResponse;
+    // Interceptar res.send
+    res.send = function(data) {
+      registrarEnBitacora();
+      return originalSend(data);
+    };
+
+    // Interceptar res.json
+    res.json = function(data) {
+      registrarEnBitacora();
+      return originalJson(data);
+    };
 
     next();
   };
